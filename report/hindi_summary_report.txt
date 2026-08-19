@@ -1,0 +1,44 @@
+
+=======================================================
+HINDI DATASET — TRAIN-SPLIT ONLY (used for pretraining)
+=======================================================
+Downloaded tokenizer tokens (train) : 606,282,005
+Manual tokenizer tokens (train)     : 6,777,503
+Total tokenizer tokens (train)      : 613,059,508
+Manual percentage (train)           : 1.11%
+Required manual percentage          : 20%
+Requirement satisfied                : NO
+Additional manual train tokens needed: ~115,834,399
+-------------------------------------------------------
+=======================================================
+
+Cleaning statistics per source:
+{'source_id': 'manual_book_hindi_29399bb778', 'lines_seen': 3559, 'lines_dropped_short': 9, 'lines_dropped_nonscript': 0, 'lines_dropped_boilerplate': 200, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_90a52c7eaa', 'lines_seen': 26088, 'lines_dropped_short': 145, 'lines_dropped_nonscript': 37, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_562f82ae26', 'lines_seen': 13735, 'lines_dropped_short': 150, 'lines_dropped_nonscript': 108, 'lines_dropped_boilerplate': 524, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_92435e259d', 'lines_seen': 4945, 'lines_dropped_short': 62, 'lines_dropped_nonscript': 42, 'lines_dropped_boilerplate': 92, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_a9ab3fc00e', 'lines_seen': 6055, 'lines_dropped_short': 48, 'lines_dropped_nonscript': 155, 'lines_dropped_boilerplate': 348, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_0fb67d3ffe', 'lines_seen': 29562, 'lines_dropped_short': 171, 'lines_dropped_nonscript': 523, 'lines_dropped_boilerplate': 1038, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_d46276fcd6', 'lines_seen': 26399, 'lines_dropped_short': 58, 'lines_dropped_nonscript': 903, 'lines_dropped_boilerplate': 544, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_5d4f45de3f', 'lines_seen': 3484, 'lines_dropped_short': 16, 'lines_dropped_nonscript': 39, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_22e1b4cffd', 'lines_seen': 3899, 'lines_dropped_short': 8, 'lines_dropped_nonscript': 0, 'lines_dropped_boilerplate': 104, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_a21d22c0fc', 'lines_seen': 5998, 'lines_dropped_short': 41, 'lines_dropped_nonscript': 101, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_cb96fed80b', 'lines_seen': 7387, 'lines_dropped_short': 13, 'lines_dropped_nonscript': 57, 'lines_dropped_boilerplate': 272, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_62a9bde359', 'lines_seen': 2010, 'lines_dropped_short': 49, 'lines_dropped_nonscript': 16, 'lines_dropped_boilerplate': 30, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_0bbe8a5ee0', 'lines_seen': 949, 'lines_dropped_short': 3, 'lines_dropped_nonscript': 7, 'lines_dropped_boilerplate': 17, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_c643477597', 'lines_seen': 6710, 'lines_dropped_short': 34, 'lines_dropped_nonscript': 128, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_b0cfa31f1b', 'lines_seen': 969, 'lines_dropped_short': 7, 'lines_dropped_nonscript': 586, 'lines_dropped_boilerplate': 11, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_132858b82d', 'lines_seen': 1493, 'lines_dropped_short': 5, 'lines_dropped_nonscript': 10, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_6796976ee6', 'lines_seen': 4066, 'lines_dropped_short': 25, 'lines_dropped_nonscript': 2, 'lines_dropped_boilerplate': 105, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_3761fec418', 'lines_seen': 4426, 'lines_dropped_short': 12, 'lines_dropped_nonscript': 4, 'lines_dropped_boilerplate': 108, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_0064df1112', 'lines_seen': 1645, 'lines_dropped_short': 1, 'lines_dropped_nonscript': 15, 'lines_dropped_boilerplate': 25, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_336c7ea4fb', 'lines_seen': 154, 'lines_dropped_short': 8, 'lines_dropped_nonscript': 0, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_txt_hindi_2f64d96feb', 'lines_seen': 5959, 'lines_dropped_short': 4, 'lines_dropped_nonscript': 3, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_book_hindi_4a31c61e6a', 'lines_seen': 6922, 'lines_dropped_short': 5, 'lines_dropped_nonscript': 234, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_book_hindi_a31073c86b', 'lines_seen': 8392, 'lines_dropped_short': 38, 'lines_dropped_nonscript': 279, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_book_hindi_b3a3bdc7e5', 'lines_seen': 3766, 'lines_dropped_short': 6, 'lines_dropped_nonscript': 123, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_scrape_hindi_www_amarujala_com', 'lines_seen': 429609, 'lines_dropped_short': 3477, 'lines_dropped_nonscript': 1160, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 40}
+{'source_id': 'manual_scrape_hindi_www_jagran_com', 'lines_seen': 58825, 'lines_dropped_short': 2, 'lines_dropped_nonscript': 2371, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 1602}
+{'source_id': 'manual_scrape_hindi_www_bhaskar_com', 'lines_seen': 89788, 'lines_dropped_short': 1, 'lines_dropped_nonscript': 26, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 25}
+{'source_id': 'manual_scrape_hindi_navbharattimes_indiatimes_com', 'lines_seen': 12819, 'lines_dropped_short': 3, 'lines_dropped_nonscript': 74, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 120}
+{'source_id': 'sangraha_hin', 'lines_seen': 11464856, 'lines_dropped_short': 24522, 'lines_dropped_nonscript': 204173, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 24083}

@@ -1,0 +1,21 @@
+
+=======================================================
+NEPALI DATASET — TRAIN-SPLIT ONLY (used for pretraining)
+=======================================================
+Downloaded tokenizer tokens (train) : 698,144,165
+Manual tokenizer tokens (train)     : 322,028
+Total tokenizer tokens (train)      : 698,466,193
+Manual percentage (train)           : 0.05%
+Required manual percentage          : 20%
+Requirement satisfied                : NO
+Additional manual train tokens needed: ~139,371,211
+-------------------------------------------------------
+(FYI) Overall corpus incl. val+test : 775,992,967 tokens — NOT used for the 20% check above
+=======================================================
+
+Cleaning statistics per source:
+{'source_id': 'manual_book_nepali_201aff9d31', 'lines_seen': 11674, 'lines_dropped_short': 215, 'lines_dropped_nonscript': 0, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_book_nepali_7e00963eb7', 'lines_seen': 16197, 'lines_dropped_short': 24, 'lines_dropped_nonscript': 16, 'lines_dropped_boilerplate': 446, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_book_nepali_1912ff06c7', 'lines_seen': 4139, 'lines_dropped_short': 453, 'lines_dropped_nonscript': 2397, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'manual_scrape_nepali_www_setopati_com', 'lines_seen': 3, 'lines_dropped_short': 0, 'lines_dropped_nonscript': 3, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 0}
+{'source_id': 'sangraha_nep', 'lines_seen': 13755971, 'lines_dropped_short': 6719, 'lines_dropped_nonscript': 42042, 'lines_dropped_boilerplate': 0, 'docs_dropped_duplicate': 53}

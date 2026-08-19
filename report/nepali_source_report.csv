@@ -1,0 +1,9 @@
+source_id,source_name,manual_or_downloaded,title,author,pub_year,license_note,ocr_used,n_documents,true_tokenizer_tokens,raw_chars,cleaned_chars
+manual_book_nepali_201aff9d31,16th_Plan.pdf,manual,16th Plan (Nepal),"National Planning Commission, Nepal",unknown - verify,govt document - verify redistribution rights,1,318,143466,484387,484387
+manual_book_nepali_7e00963eb7,NPC2076BS_15th_Plan_Approach_Paper1.pdf,manual,unknown - verify,unknown - verify,unknown - verify,unknown - verify redistribution rights,1,573,207921,771839,771839
+manual_book_nepali_1912ff06c7,RatoBangalaFoundation_ChandakoChahara.pdf,manual,unknown - verify,unknown - verify,unknown - verify,unknown - verify redistribution rights,1,11,8736,10490,10490
+manual_scrape_nepali_www_onlinekhabar_com,https://www.onlinekhabar.com,manual,Scraped articles: https://www.onlinekhabar.com,various (news site),2026,unknown - verify redistribution rights before submission,0,0,0,0,0
+manual_scrape_nepali_www_setopati_com,https://www.setopati.com,manual,Scraped articles: https://www.setopati.com,various (news site),2026,unknown - verify redistribution rights before submission,0,0,0,0,0
+manual_scrape_nepali_ekantipur_com,https://ekantipur.com,manual,Scraped articles: https://ekantipur.com,various (news site),2026,unknown - verify redistribution rights before submission,0,0,0,0,0
+manual_scrape_nepali_www_ratopati_com,https://www.ratopati.com,manual,Scraped articles: https://www.ratopati.com,various (news site),2026,unknown - verify redistribution rights before submission,0,0,0,0,0
+sangraha_nep,ai4bharat/sangraha,downloaded,Sangraha (verified split),AI4Bharat,2024,NOT VERIFIED HERE - check ai4bharat/sangraha dataset card and underlying source licenses before submission,0,1835390,775632844,3549362758,3536950546

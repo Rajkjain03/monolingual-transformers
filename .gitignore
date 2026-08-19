@@ -1,0 +1,26 @@
+# Environments
+lma_env/
+__pycache__/
+*.pyc
+
+# Large Data & Artifacts
+books/
+*.db
+*.db-*
+*.sqlite
+*.txt
+!requirements.txt
+!report/*.txt
+
+*/data/
+*/final/
+
+# Ensure scripts and tokenizers are not ignored
+!hindi/scripts/
+!nepali/scripts/
+!hindi/tokenizer/
+!nepali/tokenizer/
+
+# Log files
+*.log
+output_pdf.txt
