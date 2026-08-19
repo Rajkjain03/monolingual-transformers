@@ -112,6 +112,11 @@ python nepali/scripts/nepali_tokenize.py
 |--------|-------|--------|
 | Algorithm | SentencePiece (BPE) | SentencePiece (BPE) |
 | Vocabulary size | 32,000 | 16,000 |
+| Avg chars per token | 4.12 | 4.59 |
+| Fertility (tokens/word) | 1.24 | 1.40 |
+| Unknown-token rate (val) | 0.0485% | 0.1585% |
+
+> **Known Limitations:** Redistribution rights for the Sangraha corpus and several manual sources are currently unverified. The database logs these as "unknown — verify redistribution rights". Strict open-source redistribution licenses have not been fully confirmed for all subsets.
 
 ---
 
