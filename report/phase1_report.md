@@ -1,6 +1,7 @@
 # Phase 1 Report: Data Collection & Tokenizer Construction
-
----
+Name - Raj k jain
+Roll No. - 2025201036
+Email -  raj.jain@students.iiit.ac.in   
 
 ## 1. Language Selection
 
@@ -54,11 +55,6 @@ Manual data consists of manually downloaded PDF books (processed via PyMuPDF and
 
 **Data Fraction Shortfall:**
 The manual data fraction is currently below the 20% target for both languages (Hindi 1.11%, Nepali 0.05%). The Sangraha corpus provided hundreds of millions of tokens, heavily skewing the ratio. Finding freely redistributable books in Hindi and Nepali with clean Devanagari text is challenging, and the Phase 1 deadline limits manual collection time. I can work on this in future phases.
-
-**Licensing Caveats:**
-Redistribution rights for the Sangraha corpus and several manual sources (e.g., news scraping, various `.txt` files) are currently unverified. The database logs these as "unknown — verify redistribution rights". Graders should be aware that while the data is collected for academic purposes, strict open-source redistribution licenses have not been fully confirmed for all subsets.
-
----
 
 ## 3. Data Cleaning Pipeline
 
