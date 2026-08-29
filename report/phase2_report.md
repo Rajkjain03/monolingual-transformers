@@ -35,13 +35,13 @@ The intrinsic metrics between Model H and Model L are incredibly close. Hindi ac
 ## 3. Generation Quality
 Generations were evaluated using both qualitative sampling and exact n-gram matching metrics against reference continuations. 
 
-| Metric | Model H (Hindi) |
-|--------|-----------------|
-| BLEU-4 | 3.51 |
-| chrF | 9.19 |
-| ROUGE-L | 0.0000 |
-| Distinct-1 | 0.1321 |
-| Distinct-2 | 0.2599 |
+| Metric | Model H (Hindi) | Model L (Nepali) |
+|--------|-----------------|------------------|
+| BLEU-4 | 3.51 | 0.00 |
+| chrF | 9.19 | 4.43 |
+| ROUGE-L | 0.0000 | 0.0000 |
+| Distinct-1 | 0.1321 | 0.2551 |
+| Distinct-2 | 0.2599 | 0.3807 |
 
 **Discussion on Metrics:**
 For open-ended causal language modeling, strict n-gram metrics like BLEU-4 and ROUGE-L are famously uninformative because there are exponentially many valid ways to continue a sentence. A model might generate a perfectly fluent continuation that simply doesn't match the exact words in the single reference text, resulting in a BLEU score near zero (as seen above). Distinct-1/2 are much more useful for measuring diversity (lack of repetition).

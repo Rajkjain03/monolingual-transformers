@@ -33,7 +33,7 @@ def compute_intrinsic_metrics(model, dataloader):
                 logits, loss = model(x, targets=y)
             total_loss += loss.item()
             total_steps += 1
-            if total_steps >= 500: # Evaluate on 500 batches
+            if total_steps >= 100: # Evaluate on 100 batches for speed
                 break
     
     avg_loss = total_loss / total_steps
@@ -71,20 +71,70 @@ def generate(model, sp, prefix, max_new_tokens=50, temp=1.0):
                 
     return sp.decode_ids(tokens + generated)
 
-def evaluate_generation(model, sp):
-    # Some basic prompts for testing Nepali
-    prompts = [
-        "नेपाल एक",
-        "विज्ञानको क्षेत्रमा",
-        "उहाँले भन्नुभयो कि"
-    ]
+def evaluate_generation(model, sp, dataloader):
+    print("\n--- Generation Quality Metrics ---")
+    scorer = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=False)
     
-    print("\n--- Generation Quality ---")
+    references = []
+    hypotheses = []
+    
+    with torch.no_grad():
+        for x, y in dataloader:
+            x = x.to(DEVICE)
+            # Use first 10 tokens as prefix
+            prefix = x[0, :10].unsqueeze(0)
+            target_ids = y[0, 9:59].cpu().tolist() # Next 50 tokens
+            
+            ref_text = sp.decode_ids(target_ids)
+            
+            # Generate 50 tokens
+            gen_text = ""
+            current_x = prefix
+            for _ in range(50):
+                with torch.amp.autocast(DEVICE, dtype=torch.float16):
+                    logits, _ = model(current_x)
+                next_token = torch.argmax(logits[0, -1, :], dim=-1).item()
+                current_x = torch.cat([current_x, torch.tensor([[next_token]], device=DEVICE)], dim=1)
+                if next_token == sp.eos_id(): break
+                
+            gen_text = sp.decode_ids(current_x[0, 10:].cpu().tolist())
+            
+            references.append(ref_text)
+            hypotheses.append(gen_text)
+            
+            if len(references) >= 50: # evaluate on 50 samples
+                break
+                
+    bleu = sacrebleu.corpus_bleu(hypotheses, [[r] for r in references])
+    chrf = sacrebleu.corpus_chrf(hypotheses, [[r] for r in references])
+    
+    rouge_l = sum(scorer.score(r, h)['rougeL'].fmeasure for r, h in zip(references, hypotheses)) / len(references)
+    
+    print(f"BLEU-4: {bleu.score:.2f}")
+    print(f"chrF: {chrf.score:.2f}")
+    print(f"ROUGE-L: {rouge_l:.4f}")
+    
+    # Unigrams / Bigrams
+    unigrams = set()
+    bigrams = set()
+    total_words = 0
+    for h in hypotheses:
+        words = h.split()
+        total_words += len(words)
+        for w in words: unigrams.add(w)
+        for i in range(len(words)-1): bigrams.add((words[i], words[i+1]))
+        
+    d1 = len(unigrams) / max(1, total_words)
+    d2 = len(bigrams) / max(1, total_words)
+    print(f"Distinct-1: {d1:.4f}")
+    print(f"Distinct-2: {d2:.4f}")
+
+    # Qualitative test
+    prompts = ["नेपाल एक", "विज्ञानको क्षेत्रमा"]
+    print("\n--- Qualitative Examples ---")
     for prompt in prompts:
-        print(f"\nPrompt: {prompt}")
-        for temp in [0.5, 1.0, 1.5]:
-            gen = generate(model, sp, prompt, temp=temp)
-            print(f"[Temp {temp}]: {gen}")
+        for temp in [0.5, 1.0]:
+            print(f"[Temp {temp}] {prompt}: {generate(model, sp, prompt, temp=temp)}")
 
 def attention_analysis(model, sp, text, out_dir):
     tokens = sp.encode_as_ids(text)
@@ -146,5 +196,5 @@ if __name__ == "__main__":
     print(f"Perplexity (PPL): {ppl:.4f}")
     print(f"Bits-Per-Byte (BPB): {bpb:.4f}")
     
-    evaluate_generation(model, sp)
+    evaluate_generation(model, sp, val_dl)
     attention_analysis(model, sp, "नेपाल एक धेरै सुन्दर र विशाल देश हो।", "nepali/eval_plots")
