@@ -157,11 +157,11 @@ We visualized the causal self-attention matrices and calculated Entropy and Mean
 | **Hindi** | Layer 0, Head 0 | 0.7342 | 1.0252 | High confidence, extremely local |
 | | Layer 0, Head 2 | 0.2793 | 0.4727 | Hyper-local syntax (bigram extraction) |
 | | Layer 5, Head 0 | 0.7400 | 3.7288 | Long-range context fetch (Global) |
-| | Layer 5, Head 2 | 1.0285 | 3.1210 | High entropy, wide context fetch |
+| | Layer 5, Head 2 | 1.0285 | 3.1210 | Attention Sink (First token offload) |
 | **Nepali** | Layer 0, Head 0 | 1.0690 | 1.4373 | Local relationships |
 | | Layer 0, Head 2 | 1.0914 | 2.3342 | Medium-local phrasing |
 | | Layer 5, Head 0 | 0.7488 | 3.1313 | Long-range semantic context |
-| | Layer 5, Head 2 | 0.1593 | 3.8790 | High confidence long-range fetch |
+| | Layer 5, Head 2 | 0.1593 | 3.8790 | Attention Sink (Sharp offload) |
 
 *(Note: Lower Entropy = Higher confidence/sharpness in attention. Lower Distance = Attending closer to the current token).*
 
@@ -176,7 +176,9 @@ Notice how intensely diagonal the heatmaps are in Layer 0. Both Head 0 and Head 
 **Layer 5, Head 0 vs Head 2 (Deep Layers):**  
 ![Hindi L5 H0](images/attn_L5_H0_hindi.png)  
 ![Hindi L5 H2](images/attn_L5_H2_hindi.png)  
-By the final layer, the attention matrix becomes highly content-based rather than position-based. Head 0 looks far back into the past (Mean Distance ~3.7, notice the vertical stripes) to fetch semantic context from key entity tokens. Interestingly, Head 2 in Layer 5 still maintains some diagonal structure amidst the vertical bands, demonstrating that the model splits its deep attention mechanism: one head tracks long-range semantics while another ensures local syntactic flow.
+By the final layer, the attention matrix becomes highly content-based rather than position-based. Head 0 looks far back into the past (Mean Distance ~3.7, notice the vertical stripes) to fetch semantic context from key entity tokens. 
+
+Interestingly, Layer 5 Head 2 exhibits a classic **Attention Sink** pattern—nearly all query positions allocate a massive attention share to the very first token (`भारत`) regardless of content. This is a known mechanism (popularized by Xiao et al.) by which transformers offload unneeded attention mass as a "no-op" valve, rather than retrieving genuine long-range context. This contrasts perfectly with Head 0 at the same layer, which shows more distributed, content-dependent long-range attention.
 
 ### Nepali Model Attention Heatmaps
 *Prompt: "नेपाल एक धेरै सुन्दर र विशाल देश हो।"*
@@ -189,4 +191,4 @@ Just like the Hindi model, Nepali's early heads strictly learn local relationshi
 **Layer 5, Head 0 vs Head 2 (Deep Layers):**  
 ![Nepali L5 H0](images/attn_L5_H0_nepali.png)  
 ![Nepali L5 H2](images/attn_L5_H2_nepali.png)  
-Similarly, the Nepali model expands its attention distance significantly by Layer 5 (Mean Distances > 3.1). Head 0 fetches long-range semantic meaning, while Head 2 (Entropy 0.15, incredibly sharp) zeroes in on specific distant tokens to resolve context. This proves the universal mechanics of the Transformer architecture across different Indic languages!
+Similarly, the Nepali model expands its attention distance significantly by Layer 5. Head 0 fetches long-range semantic meaning, while Head 2 exhibits the exact same **Attention Sink** phenomenon seen in the Hindi model! It zeroes in almost exclusively on the first token (`नेपाल`) as a no-op valve (Entropy 0.15, incredibly sharp). This cross-lingual consistency proves the universal mechanics of the Transformer architecture across different Indic languages!
