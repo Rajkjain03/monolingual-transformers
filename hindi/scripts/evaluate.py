@@ -155,6 +155,9 @@ def evaluate_generation(model, sp, dataloader):
             print(f"[Temp {temp}] {prompt}: {generate(model, sp, prompt, temp=temp)}")
 
 def attention_analysis(model, sp, text, out_dir):
+    import matplotlib as mpl
+    mpl.rcParams['font.family'] = 'Noto Sans Devanagari'
+    
     tokens = sp.encode_as_ids(text)
     x = torch.tensor(tokens, dtype=torch.long, device=DEVICE).unsqueeze(0)
     
@@ -175,13 +178,14 @@ def attention_analysis(model, sp, text, out_dir):
         plt.savefig(f"{out_dir}/attn_L{layer_idx}_H{head_idx}.png")
         plt.close()
         
-    # Plot Layer 0 (Early) Head 0
-    attn_l0_h0 = attentions[0][0, 0].cpu().numpy()
-    plot_heatmap(attn_l0_h0, 0, 0)
-    
-    # Plot Layer 5 (Late) Head 0
-    attn_l5_h0 = attentions[-1][0, 0].cpu().numpy()
-    plot_heatmap(attn_l5_h0, 5, 0)
+    for head_idx in [0, 2]:
+        # Plot Layer 0 (Early)
+        attn_l0 = attentions[0][0, head_idx].cpu().numpy()
+        plot_heatmap(attn_l0, 0, head_idx)
+        
+        # Plot Layer 5 (Late)
+        attn_l5 = attentions[-1][0, head_idx].cpu().numpy()
+        plot_heatmap(attn_l5, 5, head_idx)
     
     # Calculate Mean Attention Distance and Entropy
     print("\n--- Attention Analysis ---")
