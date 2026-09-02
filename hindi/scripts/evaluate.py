@@ -175,7 +175,7 @@ def attention_analysis(model, sp, text, out_dir):
         sns.heatmap(attn_matrix, xticklabels=tokens_str, yticklabels=tokens_str, cmap="viridis")
         plt.title(f"Layer {layer_idx} Head {head_idx}")
         plt.tight_layout()
-        plt.savefig(f"{out_dir}/attn_L{layer_idx}_H{head_idx}.png")
+        plt.savefig(f"report/images/attn_L{layer_idx}_H{head_idx}_hindi.png")
         plt.close()
         
     for head_idx in [0, 2]:
