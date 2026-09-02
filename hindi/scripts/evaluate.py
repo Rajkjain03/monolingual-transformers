@@ -77,18 +77,17 @@ def evaluate_generation(model, sp, dataloader):
     
     references = []
     hypotheses = []
+    ref_ids_list = []
+    hyp_ids_list = []
     
     with torch.no_grad():
         for x, y in dataloader:
             x = x.to(DEVICE)
-            # Use first 10 tokens as prefix
             prefix = x[0, :10].unsqueeze(0)
-            target_ids = y[0, 9:59].cpu().tolist() # Next 50 tokens
+            target_ids = y[0, 9:59].cpu().tolist()
             
             ref_text = sp.decode_ids(target_ids)
             
-            # Generate 50 tokens
-            gen_text = ""
             current_x = prefix
             for _ in range(50):
                 with torch.amp.autocast(DEVICE, dtype=torch.float16):
@@ -97,37 +96,56 @@ def evaluate_generation(model, sp, dataloader):
                 current_x = torch.cat([current_x, torch.tensor([[next_token]], device=DEVICE)], dim=1)
                 if next_token == sp.eos_id(): break
                 
-            gen_text = sp.decode_ids(current_x[0, 10:].cpu().tolist())
+            gen_ids = current_x[0, 10:].cpu().tolist()
+            gen_text = sp.decode_ids(gen_ids)
             
             references.append(ref_text)
             hypotheses.append(gen_text)
+            ref_ids_list.append(" ".join(map(str, target_ids)))
+            hyp_ids_list.append(" ".join(map(str, gen_ids)))
             
-            if len(references) >= 50: # evaluate on 50 samples
+            if len(references) >= 50:
                 break
                 
     bleu = sacrebleu.corpus_bleu(hypotheses, [[r] for r in references])
     chrf = sacrebleu.corpus_chrf(hypotheses, [[r] for r in references])
     
-    rouge_l = sum(scorer.score(r, h)['rougeL'].fmeasure for r, h in zip(references, hypotheses)) / len(references)
+    # ROUGE fails on Devanagari due to a-z regex, so calculate it on token IDs directly
+    rouge_l = sum(scorer.score(r, h)['rougeL'].fmeasure for r, h in zip(ref_ids_list, hyp_ids_list)) / len(references)
     
     print(f"BLEU-4: {bleu.score:.2f}")
     print(f"chrF: {chrf.score:.2f}")
     print(f"ROUGE-L: {rouge_l:.4f}")
     
-    # Unigrams / Bigrams
+    # Unigrams / Bigrams for Distinct and Repetition Rate
     unigrams = set()
     bigrams = set()
     total_words = 0
+    total_bigrams = 0
+    repeated_bigrams = 0
+    
     for h in hypotheses:
         words = h.split()
         total_words += len(words)
+        
+        seen_bigrams = set()
+        for i in range(len(words)-1):
+            bg = (words[i], words[i+1])
+            bigrams.add(bg)
+            total_bigrams += 1
+            if bg in seen_bigrams:
+                repeated_bigrams += 1
+            seen_bigrams.add(bg)
+            
         for w in words: unigrams.add(w)
-        for i in range(len(words)-1): bigrams.add((words[i], words[i+1]))
         
     d1 = len(unigrams) / max(1, total_words)
-    d2 = len(bigrams) / max(1, total_words)
+    d2 = len(bigrams) / max(1, total_bigrams)
+    rep_rate = repeated_bigrams / max(1, total_bigrams)
+    
     print(f"Distinct-1: {d1:.4f}")
     print(f"Distinct-2: {d2:.4f}")
+    print(f"Repetition Rate: {rep_rate:.4f}")
 
     # Qualitative test
     prompts = ["भारत एक", "विज्ञान के क्षेत्र में"]
