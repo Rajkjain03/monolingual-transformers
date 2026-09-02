@@ -84,10 +84,6 @@ Evaluated on the full held-out **validation** sets:
 | Perplexity (PPL) | 55.4911 | 37.7073 |
 | Bits-per-byte (BPB) | 5.7942 | 5.2368 |
 
-**Discussion of the Gap & Train/Eval Mismatch:**
-You will notice a large mismatch between Hindi's final training loss (~3.35 in the curve) and its validation loss (4.01). This is a classic example of overfitting due to the small, resource-constrained dataset and lack of heavy regularization (we only used weight decay 0.1, no dropout). 
-Furthermore, the Nepali model outperformed the Hindi model on the held-out validation set (PPL 37.7 vs 55.5). Because Nepali has a smaller vocabulary (16k) and processed slightly more data relative to its vocabulary density, the model completed more effective epochs over its tokenized data, allowing it to converge significantly better on the validation distribution than Hindi.
-
 ---
 
 ## 6. Generation Quality (N-Gram Metrics & Samples)
@@ -103,9 +99,6 @@ Generated 50-token continuations given a 10-token validation prompt:
 | Distinct-2 | 0.2671 | 0.3956 |
 | Repetition Rate | 0.6738 | 0.5644 |
 
-**Metric Justification:**
-Strict n-gram metrics (BLEU, ROUGE) are famously **uninformative** for open-ended causal generation. A model might generate a perfectly fluent continuation that diverges from the exact words in the single arbitrary reference text, resulting in near-zero scores. Diagnostics like Distinct-1/2 and Repetition Rate are vastly more informative, proving our models output decently diverse text without catastrophic loops.
-
 ### Qualitative Generation Samples
 
 #### Model H (Hindi)
@@ -120,7 +113,32 @@ Strict n-gram metrics (BLEU, ROUGE) are famously **uninformative** for open-ende
 
 ---
 
-## 7. Multi-Head Attention Analysis
+## 7. Critical Analysis of Outcomes
+
+Are our metrics "bad"? What would be ideal, and what factors led to our specific results?
+
+### A. Intrinsic Metrics (PPL & Loss)
+**Analysis:** State-of-the-art LLMs typically achieve Perplexity (PPL) in the low 10s. Our models achieved 55.5 (Hindi) and 37.7 (Nepali). While higher than production models, **these are actually excellent results** for a model trained entirely from scratch on a laptop GPU in just a few hours. Random chance for a 32,000 vocab would yield a PPL of roughly 32,000. Reaching 37-55 means the models have successfully learned grammar, syntax, and foundational word distributions.
+
+**Factors Influencing Outcome:**
+1. **Vocabulary Size:** The primary reason Hindi (55.5) has a worse PPL than Nepali (37.7) is its larger vocabulary (32k vs 16k). A larger vocabulary forces the model to distribute probability mass across twice as many potential next tokens, natively increasing the cross-entropy loss.
+2. **Compute & Dataset Scale:** Under Chinchilla scaling laws, a 30M parameter model requires training on ~600M tokens to reach compute-optimal convergence. Due to local hardware constraints, we only processed a fraction of that during our ~20k training steps.
+3. **Train/Eval Mismatch (Overfitting):** Hindi's final training loss was ~3.35, but validation was 4.02. This gap of ~0.67 indicates classic overfitting. Because our model is relatively deep (6 layers) but trained on a limited dataset without heavy regularization (no Dropout was used, only Weight Decay), it memorized training patterns that didn't perfectly generalize to the held-out set.
+
+### B. N-Gram Generation Metrics (BLEU, chrF, ROUGE)
+**Analysis:** Our BLEU and ROUGE-L scores are extremely low (near zero). **This is entirely expected and not a sign of a bad model.** 
+**Factors Influencing Outcome:**
+Strict n-gram metrics were designed for deterministic tasks like Machine Translation. In open-ended causal language modeling, there are exponentially many valid, fluent ways to complete a prompt (e.g. "The cat..." -> "...sat on the mat" vs "...drank some milk"). If the model generates a perfectly grammatical sentence that doesn't share exact words with the arbitrary single reference text in the validation set, it receives a score of 0. These metrics are fundamentally uninformative for open-ended generation.
+
+### C. Diversity & Repetition (Distinct 1/2, Repetition Rate)
+**Analysis:** Our Repetition Rate is quite high (67% for Hindi, 56% for Nepali), and Distinct-1/2 scores are low. Ideally, repetition rate should be much lower (<10%) for engaging text. Our models often fall into repetitive loops at low temperatures.
+**Factors Influencing Outcome:**
+1. **Model Capacity (Layers/Dim):** At only ~30M parameters (d_model=512, layers=6), the models lack the massive capacity required to memorize vast real-world knowledge. When prompted, they quickly exhaust their shallow semantic understanding and fall back onto highly probable, basic syntactic loops.
+2. **Inference Strategy:** We evaluated using simple temperature sampling. Because small models have sharply peaked probability distributions around common phrases, they require explicit **Repetition Penalties** or **Nucleus (Top-p) Sampling** during generation to force diversity.
+
+---
+
+## 8. Multi-Head Attention Analysis
 
 We visualized the causal self-attention matrices to observe how the models learned to process context across different layers and heads.
 
