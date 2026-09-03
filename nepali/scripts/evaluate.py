@@ -173,7 +173,7 @@ def attention_analysis(model, sp, text, out_dir):
     def plot_heatmap(attn_matrix, layer_idx, head_idx):
         plt.figure(figsize=(10, 8))
         sns.heatmap(attn_matrix, xticklabels=tokens_str, yticklabels=tokens_str, cmap="viridis")
-        plt.title(f"Layer {layer_idx} Head {head_idx}", fontdict={'family': 'sans-serif'})
+        plt.title(f"Layer {layer_idx} Head {head_idx}", fontname='DejaVu Sans')
         plt.tight_layout()
         plt.savefig(f"report/images/attn_L{layer_idx}_H{head_idx}_nepali.png")
         plt.close()
