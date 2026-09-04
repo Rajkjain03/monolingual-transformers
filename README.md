@@ -34,21 +34,32 @@
 │       ├── hindi_val.txt
 │       └── hindi_test.txt
 │
+│
 ├── nepali/
 │   ├── scripts/
+│   │   ├── model.py                   # Decoder-only Transformer architecture
+│   │   ├── train.py                   # Pretraining script with AMP and gradient accum
+│   │   ├── evaluate.py                # Evaluation script (metrics & attention heatmaps)
+│   │   ├── dataloader.py              # Memory-mapped dataset loader
+│   │   ├── prepare_data.py            # Converts .txt to binary memmap format
 │   │   ├── nepali_data_collect.py     # Resumable, chunked data collection script
 │   │   └── nepali_tokenize.py         # Parallelized tokenizer & split export script
 │   ├── tokenizer/
 │   │   ├── nepali_tokenizer.model     # Trained SentencePiece model
 │   │   └── nepali_tokenizer.vocab     # Vocabulary file (16,000 tokens)
-│   └── data/                          # Output directory for dataset splits
-│       ├── nepali_train.txt
-│       ├── nepali_val.txt
-│       └── nepali_test.txt
+│   ├── configs/
+│   │   └── config.json                # Model architecture & training hyperparameters
+│   ├── data/                          # Output directory for dataset splits
+│   │   ├── nepali_test.bin            # Tokenized evaluation data
+│   │   ├── nepali_train.bin           # Tokenized training data
+│   │   └── nepali_train.txt
+│   └── checkpoints/
+│       └── final.pt                   # Final trained checkpoint with optimizer states
 │
 └── report/
     ├── phase1_report.md               # Detailed Phase 1 report with all stats & analysis
-    └── phase1_report.tex              # LaTeX equivalent of the report
+    ├── phase2_report.md               # Detailed Phase 2 report (architecture, evaluation)
+    └── images/                        # Generated plots (heatmaps, loss curves)
 ```
 
 ---
@@ -61,6 +72,8 @@
 | Train/Val/Test splits (`.txt`) | Nepali | https://drive.google.com/drive/folders/1Lq7IYyVIRJTbLPG1fdc2if_RiI713HS7?usp=sharing |
 | SQLite database (`hindi_state.db`, 8.0 GB) | Hindi | https://drive.google.com/file/d/1EaZsr74aLL0g70TVOkbckQr62NDk90CH/view?usp=sharing |
 | SQLite database (`nepali_state.db`, 11.0 GB) | Nepali | https://drive.google.com/file/d/1avTD7KQ92QcKJojcmqSV3jb4bW1q3vHH/view?usp=sharing |
+| Pretrained Checkpoint (`final.pt`) | Hindi | https://drive.google.com/file/d/1QpTcnaJEnypQP3c9NFM790h3enfT7xlm/view?usp=sharing |
+| Pretrained Checkpoint (`final.pt`) | Nepali | https://drive.google.com/file/d/1a7cVgfeJVn6-yiZWHhG2N4YwfBfJmdwh/view?usp=sharing |
 
 ---
 
@@ -88,7 +101,25 @@ After the data is collected, generate your tokenizers and `.txt` splits by runni
 python hindi/scripts/hindi_tokenize.py
 python nepali/scripts/nepali_tokenize.py
 ```
-*These scripts train a SentencePiece model, parallel-encode millions of documents across CPU cores, and export the datasets cleanly into `hindi/data/` and `nepali/data/`.*
+
+### Stage 3: Phase 2 Pretraining
+Convert the text files into memory-mapped binary arrays (for efficient RAM usage during training):
+```bash
+python hindi/scripts/prepare_data.py
+python nepali/scripts/prepare_data.py
+```
+Train the models from scratch (resumable if interrupted):
+```bash
+python hindi/scripts/train.py
+python nepali/scripts/train.py
+```
+
+### Stage 4: Phase 2 Evaluation
+Evaluate PPL, BPB, Generation Metrics (BLEU/chrF/ROUGE-L), and Attention Heatmaps:
+```bash
+python hindi/scripts/evaluate.py
+python nepali/scripts/evaluate.py
+```
 
 ---
 
