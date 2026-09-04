@@ -151,6 +151,21 @@ python nepali/scripts/evaluate.py
 
 ---
 
+## Phase 2: Pretraining Results
+
+Below is a snapshot of the final language-modeling and generation metrics computed on the held-out test sets. For a deep dive into the loss curves, architectural justification, attention analysis, and qualitative generation results, please read the full `report/phase2_report.md`.
+
+| Metric | Hindi (Model H) | Nepali (Model L) |
+|--------|-----------------|------------------|
+| Cross-Entropy Loss | 4.0162 | 3.6299 |
+| Perplexity (PPL) | 55.4911 | 37.7073 |
+| Bits-Per-Byte (BPB)| 5.7942 | 5.2368 |
+| BLEU-4 | 3.51 | 0.00 |
+| chrF | 9.19 | 4.43 |
+| ROUGE-L | 0.0612 | 0.0680 |
+
+---
+
 ## Contact
 
 Name - Raj k jain
