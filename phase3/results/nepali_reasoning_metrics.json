@@ -1,0 +1,71 @@
+{
+  "language": "nepali",
+  "metric": "entity exact-match accuracy",
+  "test_file": "/home/rajkjain/Downloads/lma_local/phase3/data/nepali/test.jsonl",
+  "pretrained": {
+    "direct": {
+      "correct": 2,
+      "total": 200,
+      "accuracy": 0.01
+    },
+    "transitive": {
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    "overall": {
+      "correct": 2,
+      "total": 400,
+      "accuracy": 0.005
+    }
+  },
+  "finetuned": {
+    "direct": {
+      "correct": 57,
+      "total": 200,
+      "accuracy": 0.285
+    },
+    "transitive": {
+      "correct": 41,
+      "total": 200,
+      "accuracy": 0.205
+    },
+    "overall": {
+      "correct": 98,
+      "total": 400,
+      "accuracy": 0.245
+    }
+  },
+  "fixed_example": {
+    "pretrained": {
+      "id": "nepali-test-00001",
+      "task_type": "direct",
+      "attribute": "price",
+      "prompt": "सुनिता को सामानको मूल्य 996 रुपैयाँ छ र इशा को सामानको मूल्य 5112 रुपैयाँ छ। यीमध्ये को सस्तो छ?",
+      "expected": "सुनिता",
+      "completion": "यो एक राम्रो विकल्प हो कि यो एक राम्रो विकल्प हो।",
+      "predicted": "",
+      "correct": false
+    },
+    "finetuned": {
+      "id": "nepali-test-00001",
+      "task_type": "direct",
+      "attribute": "price",
+      "prompt": "सुनिता को सामानको मूल्य 996 रुपैयाँ छ र इशा को सामानको मूल्य 5112 रुपैयाँ छ। यीमध्ये को सस्तो छ?",
+      "expected": "सुनिता",
+      "completion": "सुनिता",
+      "predicted": "सुनिता",
+      "correct": true
+    }
+  },
+  "failure_example": {
+    "id": "nepali-test-00006",
+    "task_type": "transitive",
+    "attribute": "price",
+    "prompt": "लक्ष्मी, शोभा भन्दा बढी महँगो छ र शोभा, रञ्जना भन्दा बढी महँगो छ। यीमध्ये सबैभन्दा महँगो को छ?",
+    "expected": "लक्ष्मी",
+    "completion": "शोभा",
+    "predicted": "शोभा",
+    "correct": false
+  }
+}

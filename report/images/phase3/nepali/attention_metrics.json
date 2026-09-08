@@ -1,0 +1,50 @@
+{
+  "language": "nepali",
+  "prompt": "सुनिता को सामानको मूल्य 996 रुपैयाँ छ र इशा को सामानको मूल्य 5112 रुपैयाँ छ। यीमध्ये को सस्तो छ?",
+  "layers": {
+    "0": {
+      "0": {
+        "pretrained": {
+          "mean_entropy": 2.0962977409362793,
+          "mean_distance": 6.529304271609969
+        },
+        "finetuned": {
+          "mean_entropy": 2.1268696784973145,
+          "mean_distance": 6.601301224560787
+        }
+      },
+      "2": {
+        "pretrained": {
+          "mean_entropy": 2.0277440547943115,
+          "mean_distance": 7.726981057070953
+        },
+        "finetuned": {
+          "mean_entropy": 1.9974185228347778,
+          "mean_distance": 8.037788536073155
+        }
+      }
+    },
+    "5": {
+      "0": {
+        "pretrained": {
+          "mean_entropy": 1.2343943119049072,
+          "mean_distance": 10.24877681541111
+        },
+        "finetuned": {
+          "mean_entropy": 1.6902881860733032,
+          "mean_distance": 6.554643495683316
+        }
+      },
+      "2": {
+        "pretrained": {
+          "mean_entropy": 0.6796860098838806,
+          "mean_distance": 12.481791306603363
+        },
+        "finetuned": {
+          "mean_entropy": 0.871798574924469,
+          "mean_distance": 8.195590581094601
+        }
+      }
+    }
+  }
+}

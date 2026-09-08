@@ -1,0 +1,20 @@
+{
+  "language": "nepali",
+  "phase": 3,
+  "task": "reasoning_sft",
+  "pretrained_checkpoint": "nepali/checkpoints/final.pt",
+  "train_file": "phase3/data/nepali/train.jsonl",
+  "validation_file": "phase3/data/nepali/val.jsonl",
+  "test_file": "phase3/data/nepali/test.jsonl",
+  "learning_rate": 2e-5,
+  "epochs": 5,
+  "batch_size": 4,
+  "gradient_accumulation_steps": 16,
+  "optimizer": "AdamW",
+  "betas": [0.9, 0.95],
+  "weight_decay": 0.01,
+  "scheduler": "CosineAnnealingLR",
+  "gradient_clip_norm": 1.0,
+  "seed": 20260908,
+  "checkpoint_directory": "phase3/checkpoints/nepali"
+}

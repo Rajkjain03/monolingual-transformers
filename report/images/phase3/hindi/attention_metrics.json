@@ -1,0 +1,50 @@
+{
+  "language": "hindi",
+  "prompt": "नम्रता की वस्तु की कीमत 1250 रुपये है और लता की वस्तु की कीमत 5707 रुपये है। इनमें कौन महंगा है?",
+  "layers": {
+    "0": {
+      "0": {
+        "pretrained": {
+          "mean_entropy": 1.3393720388412476,
+          "mean_distance": 3.43483522202195
+        },
+        "finetuned": {
+          "mean_entropy": 1.356492280960083,
+          "mean_distance": 3.6256352083871137
+        }
+      },
+      "2": {
+        "pretrained": {
+          "mean_entropy": 0.5069050192832947,
+          "mean_distance": 2.1759949717071105
+        },
+        "finetuned": {
+          "mean_entropy": 0.5115824341773987,
+          "mean_distance": 2.3052502231924827
+        }
+      }
+    },
+    "5": {
+      "0": {
+        "pretrained": {
+          "mean_entropy": 1.0094345808029175,
+          "mean_distance": 7.972502403908572
+        },
+        "finetuned": {
+          "mean_entropy": 1.1249321699142456,
+          "mean_distance": 7.604434945780772
+        }
+      },
+      "2": {
+        "pretrained": {
+          "mean_entropy": 1.5412596464157104,
+          "mean_distance": 5.045421309317555
+        },
+        "finetuned": {
+          "mean_entropy": 1.6320927143096924,
+          "mean_distance": 4.956317909727659
+        }
+      }
+    }
+  }
+}

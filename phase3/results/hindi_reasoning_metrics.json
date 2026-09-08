@@ -1,0 +1,71 @@
+{
+  "language": "hindi",
+  "metric": "entity exact-match accuracy",
+  "test_file": "/home/rajkjain/Downloads/lma_local/phase3/data/hindi/test.jsonl",
+  "pretrained": {
+    "direct": {
+      "correct": 42,
+      "total": 200,
+      "accuracy": 0.21
+    },
+    "transitive": {
+      "correct": 6,
+      "total": 200,
+      "accuracy": 0.03
+    },
+    "overall": {
+      "correct": 48,
+      "total": 400,
+      "accuracy": 0.12
+    }
+  },
+  "finetuned": {
+    "direct": {
+      "correct": 104,
+      "total": 200,
+      "accuracy": 0.52
+    },
+    "transitive": {
+      "correct": 87,
+      "total": 200,
+      "accuracy": 0.435
+    },
+    "overall": {
+      "correct": 191,
+      "total": 400,
+      "accuracy": 0.4775
+    }
+  },
+  "fixed_example": {
+    "pretrained": {
+      "id": "hindi-test-00002",
+      "task_type": "transitive",
+      "attribute": "price",
+      "prompt": "क्रम यह है: ज्योति > हेमा और हेमा > दिव्या, जहाँ > का अर्थ अधिक महंगा है। सबसे महंगा कौन है?",
+      "expected": "ज्योति",
+      "completion": "⁇   ⁇   ⁇   ⁇   ⁇   ⁇",
+      "predicted": "",
+      "correct": false
+    },
+    "finetuned": {
+      "id": "hindi-test-00002",
+      "task_type": "transitive",
+      "attribute": "price",
+      "prompt": "क्रम यह है: ज्योति > हेमा और हेमा > दिव्या, जहाँ > का अर्थ अधिक महंगा है। सबसे महंगा कौन है?",
+      "expected": "ज्योति",
+      "completion": "ज्योति",
+      "predicted": "ज्योति",
+      "correct": true
+    }
+  },
+  "failure_example": {
+    "id": "hindi-test-00006",
+    "task_type": "transitive",
+    "attribute": "price",
+    "prompt": "लता, हेमा से अधिक महंगा है। हेमा, नम्रता से अधिक महंगा है। बताइए, सबसे सस्ता कौन है?",
+    "expected": "नम्रता",
+    "completion": "मीरा",
+    "predicted": "",
+    "correct": false
+  }
+}

@@ -1,5 +1,6 @@
 # Environments
 lma_env/
+.venv_phase3/
 __pycache__/
 *.pyc
 
@@ -14,6 +15,12 @@ books/
 
 */data/
 */final/
+# Phase 3's generated reasoning splits are small, reproducible deliverables;
+# checkpoints remain external artifacts linked from the README.
+!phase3/data/
+!phase3/data/**
+phase3/checkpoints/
+*/checkpoints/
 
 # Ensure scripts and tokenizers are not ignored
 !hindi/scripts/
