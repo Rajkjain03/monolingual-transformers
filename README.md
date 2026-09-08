@@ -160,7 +160,7 @@ For a clean CPU environment, install the Phase 3 dependencies first:
 ```bash
 python3 -m venv .venv_phase3
 .venv_phase3/bin/python -m pip install --index-url https://download.pytorch.org/whl/cpu torch
-.venv_phase3/bin/python -m pip install sentencepiece matplotlib seaborn
+.venv_phase3/bin/python -m pip install "sentencepiece>=0.2.0" "matplotlib>=3.8" "seaborn>=0.13"
 ```
 
 Download the Phase 2 checkpoints from the links above to `hindi/checkpoints/final.pt` and `nepali/checkpoints/final.pt`. Then run separate full finetuning jobs:

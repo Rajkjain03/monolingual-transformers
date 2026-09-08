@@ -11,7 +11,6 @@ books/
 *.sqlite
 *.txt
 !requirements.txt
-!requirements-phase3.txt
 !report/*.txt
 
 */data/
