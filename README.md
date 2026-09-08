@@ -189,6 +189,34 @@ See `report/phase3_report.md` for the dataset controls, actual-command output lo
 
 The complete reproduction order is: **Stage 1 data collection → Stage 2 tokenizer training and split export → Stage 3 Phase 2 pretraining → Stage 4 Phase 2 evaluation → Stage 5 Phase 3 reasoning finetuning and analysis**. Large datasets and checkpoints are linked through Google Drive rather than committed to Git.
 
+## Phase 3: Reasoning Results
+
+The synthetic reasoning test uses 400 held-out examples per language: 200 direct comparisons and 200 transitive comparisons. Test examples use ten entity names held out from training and the `price` attribute held out from both training and validation. The generator verifies these leakage controls before writing the splits.
+
+| Exact-match accuracy | Hindi pretrained | Hindi finetuned | Nepali pretrained | Nepali finetuned |
+|---|---:|---:|---:|---:|
+| Direct comparison | 21.0% (42/200) | 52.0% (104/200) | 1.0% (2/200) | 28.5% (57/200) |
+| Transitive chaining | 3.0% (6/200) | 43.5% (87/200) | 0.0% (0/200) | 20.5% (41/200) |
+| Overall | 12.0% (48/400) | 47.75% (191/400) | 0.5% (2/400) | 24.5% (98/400) |
+
+Finetuning improved overall accuracy by 35.75 percentage points for Hindi and 24.0 percentage points for Nepali. Nepali had better Phase 2 PPL/BPB than Hindi, but much weaker zero-shot reasoning, showing that language-modeling perplexity alone does not predict compositional reasoning performance.
+
+| Finetuning summary | Hindi | Nepali |
+|---|---:|---:|
+| Best epoch | 5 | 5 |
+| Training loss | 0.4188 | 0.5496 |
+| Validation loss | 0.3398 | 0.4736 |
+| Learning rate | 2e-5 | 2e-5 |
+
+Results and reproducibility artifacts:
+
+- Metrics: `phase3/results/hindi_reasoning_metrics.json` and `phase3/results/nepali_reasoning_metrics.json`.
+- Per-example predictions: `phase3/results/*_predictions.jsonl`.
+- Training logs: `phase3/checkpoints/<language>/training_log.jsonl`.
+- Loss curves: `report/images/phase3_hindi_finetuning_loss.png` and `report/images/phase3_nepali_finetuning_loss.png`.
+- Pretrained-versus-finetuned attention metrics and heatmaps: `report/images/phase3/<language>/`.
+- Full interpretation, qualitative examples, and error analysis: [report/phase3_report.md](report/phase3_report.md).
+
 ---
 
 ## Dataset Summary
