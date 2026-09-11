@@ -93,9 +93,9 @@ Below are the attention weight distributions computed on the standard benchmark 
 | **Layer 5 (Late)** | ![L5 H0 Heatmap](images/attn_L5_H0_no_pos.png) | ![L5 H2 Heatmap](images/attn_L5_H2_no_pos.png) |
 
 ### 5.2 Key Observations on Attention Without Positional Embeddings:
-1. **Collapse of Long-Range Heads:** In standard Model H with RoPE, late layers (Layer 5) learn to form long-range syntactical dependencies (mean distance reaches **7.42** tokens). In the ablated model, Layer 5 mean distance collapses to **2.26** tokens. The model cannot coordinate long-range agreements across phrases.
+1. **Collapse of Long-Range Heads:** In standard Model H with RoPE, late layers (Layer 5) learn to form long-range syntactical dependencies (mean distance reaches **7.42** tokens). In the ablated model, Layer 5 mean distance collapses to **2.54 tokens** (specifically **2.5421**, a **-4.88** collapse from 7.4210). The model cannot coordinate long-range agreements across phrases.
 2. **Degeneration into Token-Frequency Sinks:** Instead of attending along local syntactic diagonals ($t-1$, $t-2$), attention heads collapse into static vertical bands focused on punctuation (danda `।`, commas `,`) or high-frequency functional subwords.
-3. **Higher Late-Layer Entropy:** Mean entropy in Layer 5 rises from 1.189 to 1.4417. Rather than focusing crisply on semantically bound arguments, the attention becomes diffuse.
+3. **Higher Late-Layer Entropy:** Mean entropy in Layer 5 rises from 1.189 to **1.4580**. Rather than focusing crisply on semantically bound arguments, the attention becomes diffuse.
 
 ---
 
@@ -115,7 +115,7 @@ In open-ended generation (especially at greedy temp 0.0 and low temp 0.5), the a
 - `Prompt: "विज्ञान के क्षेत्र में"` $\rightarrow$ `...से से से से से से से से से से से से...`
 - `Prompt: "हिमालय भारत का"` $\rightarrow$ `...भी ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,`
 
-**Why this occurs:** At step $t$, the decoder generates next token $w_t$. Because there is no positional embedding indicating how far along the sequence the model has progressed, the state at step $t+1$ looks nearly identical to the state at step $t$. If the high-probability prediction from context is postposition `के`, the context now has one more `के`. Without a positional increment to shift the internal representation, the logits at $t+1$ still favor `के` or `में`, trapping the autoregressive generation in an infinite periodic attractor. This explains the extreme **88.5% repetition rate** and the near-zero Distinct-1 score (0.0160).
+**Why this occurs:** At step $t$, the decoder generates next token $w_t$. Because there is no positional embedding indicating how far along the sequence the model has progressed, the state at step $t+1$ looks nearly identical to the state at step $t$. If the high-probability prediction from context is postposition `के`, the context now has one more `के`. Without a positional increment to shift the internal representation, the logits at $t+1$ still favor `के` or `में`, trapping the autoregressive generation in an infinite periodic attractor. This explains the elevated **71.6% repetition rate** (0.7156) and the severely degraded Distinct-1 score of **0.0354** (3.5%, a $\sim 3.7\times$ diversity collapse from 13.2%).
 
 ### 6.3 Breakdown of Modifier-Noun Adjacency
 In Hindi, adjectives must immediately precede the noun they qualify (`सुंदर देश`, `विशाल भवन`). Without position information, attention treats an adjective 10 tokens away identically to an adjective adjacent to the noun, destroying local phrase structure and producing incoherent "word salad" at higher temperatures.
@@ -125,9 +125,9 @@ In Hindi, adjectives must immediately precede the noun they qualify (`सुं�
 ## 7. Conclusion
 
 This ablation clearly demonstrates that **positional information is not merely an incremental regularizer, but an absolute structural prerequisite for Transformer language modeling**:
-1. Removing positional embeddings causes a **45-fold increase in perplexity** (55.49 $\rightarrow$ 2536.42).
-2. It destroys generation fluency and diversity, causing repetition to surge to **88.5%** and Distinct-2 to collapse to **2.2%**.
-3. It prevents attention heads from specializing into structured syntactic paths, reducing mean attention distance from 7.42 to 2.26 tokens.
+1. Removing positional embeddings causes a **47.2-fold increase in perplexity** (55.49 $\rightarrow$ **2,617.74**).
+2. It destroys generation fluency and diversity, causing repetition to reach **71.6%** and Distinct-2 to collapse to **6.7%** (0.0672 vs. 0.2671).
+3. It prevents attention heads from specializing into structured syntactic paths, reducing mean attention distance from 7.42 to **2.54 tokens** (2.5421).
 4. It theoretically and empirically robs the model of word-order sensitivity, reducing natural language syntax to an ungrounded bag of tokens.
 
 ---
