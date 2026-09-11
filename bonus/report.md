@@ -51,19 +51,20 @@ We evaluated the ablated model on the identical held-out Hindi test split (`hind
 
 | Metric Category | Evaluation Metric | Standard Model H (RoPE) | Ablated Model H (No Pos) | Impact of Removing Position |
 |---|---|:---:|:---:|---|
-| **Intrinsic LM** | Cross-Entropy Loss | **4.0162** | 7.8385 | $+3.8223$ (Massive degradation) |
-| | Perplexity (PPL) | **55.49** | 2,536.42 | $\times 45.7$ higher perplexity |
-| | Bits-Per-Byte (BPB) | **5.7942** | 11.3086 | $+5.5144$ bits/byte |
-| **Generation Quality** | BLEU-4 | **3.51** | 1.09 | $-2.42$ points drop |
-| | chrF | **9.19** | 0.88 | $-8.31$ points drop |
-| | ROUGE-L | **0.0612** | 0.0224 | $-0.0388$ drop |
-| **Diversity Diagnostics**| Distinct-1 (Unigrams) | **0.1321** (13.2%) | 0.0160 (1.6%) | $\sim 8.2\times$ reduction |
-| | Distinct-2 (Bigrams) | **0.2671** (26.7%) | 0.0221 (2.2%) | $\sim 12.1\times$ reduction |
-| | Repetition Rate | **0.6738** (67.4%) | **0.8853** (88.5%) | $+21.15$ percentage points |
-| **Attention Dynamics** | Layer 0 Mean Distance | **3.1240** | 1.9135 | Restricted local range |
-| | Layer 5 Mean Distance | **7.4210** | 2.2653 | Severe collapse of long-range heads |
-| | Layer 0 Mean Entropy | 1.2540 | 1.2457 | Similar initial dispersion |
-| | Layer 5 Mean Entropy | 1.1890 | 1.4417 | More diffuse / unfocused late attention |
+| **Intrinsic LM** | Cross-Entropy Loss | **4.0162** | 7.8701 | $+3.8539$ (Massive degradation) |
+| | Perplexity (PPL) | **55.49** | 2,617.74 | $\times 47.2$ higher perplexity |
+| | Bits-Per-Byte (BPB) | **5.7942** | 11.3541 | $+5.5599$ bits/byte |
+| **Generation Quality** | BLEU-4 | **3.51** | 1.23 | $-2.28$ points drop |
+| | chrF | **9.19** | 5.63 | $-3.56$ points drop |
+| | ROUGE-L | **0.0612** | 0.0344 | $-0.0268$ drop |
+| **Diversity Diagnostics**| Distinct-1 (Unigrams) | **0.1321** (13.2%) | 0.0354 (3.5%) | $\sim 3.7\times$ reduction |
+| | Distinct-2 (Bigrams) | **0.2671** (26.7%) | 0.0672 (6.7%) | $\sim 4.0\times$ reduction |
+| | Repetition Rate | **0.6738** (67.4%) | **0.7156** (71.6%) | Elevated repetition |
+| **Attention Dynamics** | Layer 0 Mean Distance | **3.1240** | 1.9010 | Restricted local range |
+| | Layer 5 Mean Distance | **7.4210** | 2.5421 | Severe collapse of long-range heads ($-4.88$) |
+| | Layer 0 Mean Entropy | 1.2540 | 1.2513 | Similar initial dispersion |
+| | Layer 5 Mean Entropy | 1.1890 | 1.4580 | More diffuse / unfocused late attention |
+
 
 ![Standard vs Ablated Comparison Chart](images/standard_vs_nopos_comparison.png)
 
