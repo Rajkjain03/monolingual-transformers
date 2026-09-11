@@ -186,8 +186,28 @@ See `report/phase3_report.md` for the dataset controls, actual-command output lo
 - [Phase 1 report](report/phase1_report.md): collection, cleaning, splits, and tokenizer construction.
 - [Phase 2 report](report/phase2_report.md): architecture, pretraining, language-modeling evaluation, generation, and attention analysis.
 - [Phase 3 final report](report/phase3_report.md): reasoning finetuning, pretrained-versus-finetuned evaluation, post-finetuning attention comparison, cross-phase synthesis, and the final deliverable index.
+- [Bonus Ablation report](report/bonus_report.md) (also at [bonus/report.md](bonus/report.md)): No Positional Embeddings ablation study for Hindi (Model H), full Phase 2 evaluation suite, attention heatmaps, and failure analysis.
 
-The complete reproduction order is: **Stage 1 data collection → Stage 2 tokenizer training and split export → Stage 3 Phase 2 pretraining → Stage 4 Phase 2 evaluation → Stage 5 Phase 3 reasoning finetuning and analysis**. Large datasets and checkpoints are linked through Google Drive rather than committed to Git.
+The complete reproduction order is: **Stage 1 data collection → Stage 2 tokenizer training and split export → Stage 3 Phase 2 pretraining → Stage 4 Phase 2 evaluation → Stage 5 Phase 3 reasoning finetuning and analysis → Stage 6 Optional Bonus ablation**. Large datasets and checkpoints are linked through Google Drive rather than committed to Git.
+
+### Stage 6: Optional Bonus (No Positional Embeddings Ablation)
+
+Run the ablation pipeline for Model H (Hindi):
+```bash
+# 1. Empirically verify distance & word-order invariance
+./lma_env/bin/python bonus/scripts/verify_order_invariance.py
+
+# 2. Pretrain the ablated model
+./lma_env/bin/python bonus/scripts/train_no_pos.py --max-steps 100 --val-interval 50 --save-interval 100
+
+# 3. Run the full Phase 2 evaluation suite on the ablated model
+./lma_env/bin/python bonus/scripts/evaluate_no_pos.py
+
+# 4. Generate side-by-side comparison tables and plots
+./lma_env/bin/python bonus/scripts/compare_ablation.py
+```
+Full documentation, results, and analysis are available in [`bonus/README.md`](bonus/README.md) and [`bonus/report.md`](bonus/report.md).
+
 
 ## Phase 3: Reasoning Results
 

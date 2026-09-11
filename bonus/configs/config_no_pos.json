@@ -1,0 +1,20 @@
+{
+    "language": "hindi",
+    "vocab_size": 32000,
+    "dim": 512,
+    "n_layers": 6,
+    "n_heads": 8,
+    "hidden_dim": 2048,
+    "max_seq_len": 512,
+    "position_embedding": "none",
+    "batch_size": 4,
+    "lr": 5e-4,
+    "epochs": 1,
+    "grad_accum_steps": 16,
+    "val_interval": 1000,
+    "save_interval": 5000,
+    "train_data": "hindi/data/hindi_train.bin",
+    "val_data": "hindi/data/hindi_val.bin",
+    "test_data": "hindi/data/hindi_test.bin",
+    "tokenizer_path": "hindi/tokenizer/hindi_tokenizer.model"
+}

@@ -1,0 +1,46 @@
+{
+  "standard_model": {
+    "model_name": "Standard Model H (RoPE)",
+    "position_encoding": "Rotary Position Embeddings (RoPE)",
+    "parameters": 36837888,
+    "cross_entropy_loss": 4.0162,
+    "perplexity": 55.4911,
+    "bits_per_byte": 5.7942,
+    "bleu_4": 3.51,
+    "chrf": 9.19,
+    "rouge_l": 0.0612,
+    "distinct_1": 0.1321,
+    "distinct_2": 0.2671,
+    "repetition_rate": 0.6738,
+    "layer_0_entropy": 1.254,
+    "layer_0_distance": 3.124,
+    "layer_5_entropy": 1.189,
+    "layer_5_distance": 7.421
+  },
+  "ablated_model": {
+    "model_name": "Ablated Model H (No Pos)",
+    "position_encoding": "None (Ablated)",
+    "parameters": 36837888,
+    "cross_entropy_loss": 7.8385,
+    "perplexity": 2536.4157,
+    "bits_per_byte": 11.3086,
+    "bleu_4": 1.09,
+    "chrf": 0.88,
+    "rouge_l": 0.0224,
+    "distinct_1": 0.016,
+    "distinct_2": 0.0221,
+    "repetition_rate": 0.8853,
+    "layer_0_entropy": 1.2457,
+    "layer_0_distance": 1.9135,
+    "layer_5_entropy": 1.4417,
+    "layer_5_distance": 2.2653
+  },
+  "deltas": {
+    "perplexity_delta": 2480.9246,
+    "bits_per_byte_delta": 5.5144,
+    "bleu_delta": -2.42,
+    "repetition_rate_delta": 0.2115,
+    "layer_0_distance_delta": -1.2105,
+    "layer_5_distance_delta": -5.1557
+  }
+}
