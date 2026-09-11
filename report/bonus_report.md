@@ -41,7 +41,7 @@ In this ablation study, we systematically remove all positional encodings from M
 
 ### 2.2 Distance Invariance Verification
 
-To confirm that the ablated model truly lacks positional awareness, we ran [`bonus/scripts/verify_order_invariance.py`](scripts/verify_order_invariance.py). In standard Model H with RoPE, the attention weight between two identical tokens separated by distance 1 versus distance 4 changed by **0.3394** due to rotary key-query rotation. In the ablated model, queries and keys undergo zero rotation, making the semantic match between tokens invariant to sequence separation.
+To confirm that the ablated model truly lacks positional awareness, we ran [`bonus/scripts/verify_order_invariance.py`](../bonus/scripts/verify_order_invariance.py). In standard Model H with RoPE, the attention weight between two identical tokens separated by distance 1 versus distance 4 changed by **0.3394** due to rotary key-query rotation. In the ablated model, queries and keys undergo zero rotation, making the semantic match between tokens invariant to sequence separation.
 
 ---
 
@@ -66,13 +66,13 @@ We evaluated the ablated model on the identical held-out Hindi test split (`hind
 | | Layer 5 Mean Entropy | 1.1890 | 1.4580 | More diffuse / unfocused late attention |
 
 
-![Standard vs Ablated Comparison Chart](images/standard_vs_nopos_comparison.png)
+![Standard vs Ablated Comparison Chart](images/bonus/standard_vs_nopos_comparison.png)
 
 ---
 
 ## 4. Pretraining Loss Dynamics
 
-![Pretraining Loss Curve](images/loss_curve_no_pos.png)
+![Pretraining Loss Curve](images/bonus/loss_curve_no_pos.png)
 
 During pretraining without positional embeddings:
 1. **Higher Loss Floor:** The cross-entropy loss plateaus at a significantly higher value (~7.11 training, ~8.11 validation) compared to the standard model with RoPE (~4.01).
@@ -89,8 +89,8 @@ Below are the attention weight distributions computed on the standard benchmark 
 
 | Layer | Head 0 | Head 2 |
 |:---:|:---:|:---:|
-| **Layer 0 (Early)** | ![L0 H0 Heatmap](images/attn_L0_H0_no_pos.png) | ![L0 H2 Heatmap](images/attn_L0_H2_no_pos.png) |
-| **Layer 5 (Late)** | ![L5 H0 Heatmap](images/attn_L5_H0_no_pos.png) | ![L5 H2 Heatmap](images/attn_L5_H2_no_pos.png) |
+| **Layer 0 (Early)** | ![L0 H0 Heatmap](images/bonus/attn_L0_H0_no_pos.png) | ![L0 H2 Heatmap](images/bonus/attn_L0_H2_no_pos.png) |
+| **Layer 5 (Late)** | ![L5 H0 Heatmap](images/bonus/attn_L5_H0_no_pos.png) | ![L5 H2 Heatmap](images/bonus/attn_L5_H2_no_pos.png) |
 
 ### 5.2 Key Observations on Attention Without Positional Embeddings:
 1. **Collapse of Long-Range Heads:** In standard Model H with RoPE, late layers (Layer 5) learn to form long-range syntactical dependencies (mean distance reaches **7.42** tokens). In the ablated model, Layer 5 mean distance collapses to **2.26** tokens. The model cannot coordinate long-range agreements across phrases.
@@ -134,12 +134,13 @@ This ablation clearly demonstrates that **positional information is not merely a
 
 ## 8. Artifact & Reproduction Index
 
-- **Ablated Architecture:** [`bonus/scripts/model_no_pos.py`](scripts/model_no_pos.py)
-- **Pretraining Script:** [`bonus/scripts/train_no_pos.py`](scripts/train_no_pos.py)
-- **Evaluation Suite:** [`bonus/scripts/evaluate_no_pos.py`](scripts/evaluate_no_pos.py)
-- **Order Invariance Test:** [`bonus/scripts/verify_order_invariance.py`](scripts/verify_order_invariance.py)
-- **Model Comparison Script:** [`bonus/scripts/compare_ablation.py`](scripts/compare_ablation.py)
+- **Ablated Architecture:** [`bonus/scripts/model_no_pos.py`](../bonus/scripts/model_no_pos.py)
+- **Pretraining Script:** [`bonus/scripts/train_no_pos.py`](../bonus/scripts/train_no_pos.py)
+- **Evaluation Suite:** [`bonus/scripts/evaluate_no_pos.py`](../bonus/scripts/evaluate_no_pos.py)
+- **Order Invariance Test:** [`bonus/scripts/verify_order_invariance.py`](../bonus/scripts/verify_order_invariance.py)
+- **Model Comparison Script:** [`bonus/scripts/compare_ablation.py`](../bonus/scripts/compare_ablation.py)
 - **Ablated Checkpoint:** `bonus/checkpoints/best.pt`
-- **Evaluation Metrics JSON:** [`bonus/results/evaluation_metrics.json`](results/evaluation_metrics.json)
-- **Comparison Metrics JSON:** [`bonus/results/metrics_comparison.json`](results/metrics_comparison.json)
-- **Report Figures:** `bonus/images/` and `report/images/bonus/`
+- **Evaluation Metrics JSON:** [`bonus/results/evaluation_metrics.json`](../bonus/results/evaluation_metrics.json)
+- **Comparison Metrics JSON:** [`bonus/results/metrics_comparison.json`](../bonus/results/metrics_comparison.json)
+- **Report Figures:** [`report/images/bonus/`](images/bonus/)
+
