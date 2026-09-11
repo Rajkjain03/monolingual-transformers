@@ -73,16 +73,26 @@ Complete submission for the three-phase monolingual Transformer project. Model H
 │   ├── results/                       # Metrics and per-example predictions
 │   └── checkpoints/<language>/         # Local best/last resumable checkpoints
 │
+├── bonus/                             # Optional Bonus: No Positional Embeddings ablation
+│   ├── configs/                       # Ablated model config (none position embedding)
+│   ├── scripts/                       # Model, train, evaluate, verify & compare scripts
+│   ├── results/                       # Evaluation & comparison JSON metrics
+│   ├── images/                        # Attention heatmaps, loss curves & bar charts
+│   ├── checkpoints/                   # Resumable checkpoints (best.pt, last.pt)
+│   ├── report.md                      # Complete scientific ablation report
+│   └── README.md                      # Detailed reproduction guide
+│
 └── report/
     ├── phase1_report.md               # Detailed Phase 1 report with all stats & analysis
     ├── phase2_report.md               # Detailed Phase 2 report (architecture, evaluation)
     ├── phase3_report.md               # Consolidated final report and Phase 3 analysis
+    ├── bonus_report.md                # Dedicated Bonus Ablation report
     └── images/                        # Generated plots and heatmaps
 ```
 
 The Phase 3 paths above are rooted at `phase3/`: `phase3/configs/`,
 `phase3/data/`, `phase3/scripts/`, `phase3/results/`, and
-`phase3/checkpoints/`.
+`phase3/checkpoints/`. The optional bonus ablation is rooted at `bonus/` (with `bonous/` alias).
 
 ---
 
@@ -279,6 +289,38 @@ Below is a snapshot of the final language-modeling and generation metrics comput
 | BLEU-4 | 3.51 | 0.00 |
 | chrF | 9.19 | 4.43 |
 | ROUGE-L | 0.0612 | 0.0680 |
+
+---
+
+## Optional Bonus: No Positional Embeddings Ablation Results
+
+An ablation study was conducted on **Hindi (Model H)** by retraining the 36.84M parameter decoder-only Transformer with Rotary Position Embeddings (RoPE) completely removed from multi-head self-attention.
+
+The model was evaluated using the full Phase 2 metric suite on the held-out test split (`hindi/data/hindi_test.bin`):
+
+| Metric Category | Metric | Standard Model H (RoPE) | Ablated Model H (No Pos) | Consequence of Removing Position |
+|---|---|:---:|:---:|---|
+| **Parameters** | Total Trainable | **36,837,888** | **36,837,888** | Exact same architecture & capacity |
+| **Intrinsic LM** | Cross-Entropy Loss | **4.0162** | 7.8701 | $+3.8539$ (Loss floor elevated) |
+| | Perplexity (PPL) | **55.49** | 2,617.74 | $\sim 47.2\times$ higher perplexity |
+| | Bits-Per-Byte (BPB) | **5.7942** | 11.3541 | $+5.5599$ bits/byte |
+| **Generation** | BLEU-4 | **3.51** | 1.23 | Drop in n-gram precision |
+| | chrF | **9.19** | 5.63 | Drop in subword/character matching |
+| | ROUGE-L | **0.0612** | 0.0344 | Significant drop in longest common subsequence |
+| **Diversity** | Distinct-1 (Unigrams) | **0.1321** (13.2%) | 0.0354 (3.5%) | $\sim 3.7\times$ reduction in lexical diversity |
+| | Distinct-2 (Bigrams) | **0.2671** (26.7%) | 0.0672 (6.7%) | $\sim 4.0\times$ reduction in bigram diversity |
+| | Repetition Rate | **0.6738** (67.4%) | **0.7156** (71.6%) | Elevated repetition (periodic attractor loops) |
+| **Attention** | Layer 0 Attention Dist | **3.1240** | 1.9010 | Restricted local range |
+| | Layer 5 Attention Dist | **7.4210** | 2.5421 | Severe collapse of long-range heads ($-4.88$) |
+
+![Standard vs Ablated Comparison Chart](report/images/bonus/standard_vs_nopos_comparison.png)
+
+### Key Findings: What Breaks Without Position Information?
+1. **Permutation Invariance & Syntax Collapse:** Without positional embeddings, self-attention dot products become distance-invariant, rendering word order invisible. The model cannot distinguish between `राम ने रावण को मारा` (Ram killed Ravan) and `रावण ने राम को मारा` (Ravan killed Ram), collapsing grammatical relationships into an unordered bag-of-words.
+2. **Catastrophic Repetitive Loops:** Autoregressive decoding lacks a sequential temporal counter, trapping greedy generation in periodic repetitions (e.g. `...के में के में के में...`).
+3. **Failure of Long-Range Head Specialization:** Late-layer attention distance collapses from 7.42 to 2.54 tokens; attention heads fail to specialize into syntactic paths and retreat into static frequency/punctuation sinks.
+
+Complete documentation, theoretical analysis, and reproduction code are in [Bonus Report](report/bonus_report.md) and [`bonus/README.md`](bonus/README.md).
 
 ---
 
