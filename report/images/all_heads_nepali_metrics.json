@@ -1,0 +1,233 @@
+{
+  "language": "nepali",
+  "benchmark_text": "नेपाल एक धेरै सुन्दर र विशाल देश हो।",
+  "token_count": 9,
+  "tokens": [
+    "▁नेपाल",
+    "▁एक",
+    "▁धेरै",
+    "▁सुन्दर",
+    "▁र",
+    "▁विशाल",
+    "▁देश",
+    "▁हो",
+    "।"
+  ],
+  "clean_tokens": [
+    "नेपाल",
+    "एक",
+    "धेरै",
+    "सुन्दर",
+    "र",
+    "विशाल",
+    "देश",
+    "हो",
+    "।"
+  ],
+  "layers": {
+    "0": {
+      "0": {
+        "entropy": 1.068,
+        "distance": 1.437
+      },
+      "1": {
+        "entropy": 0.4658,
+        "distance": 0.609
+      },
+      "2": {
+        "entropy": 1.0908,
+        "distance": 2.3353
+      },
+      "3": {
+        "entropy": 1.1058,
+        "distance": 1.7002
+      },
+      "4": {
+        "entropy": 0.9217,
+        "distance": 1.2668
+      },
+      "5": {
+        "entropy": 0.5397,
+        "distance": 1.2077
+      },
+      "6": {
+        "entropy": 0.4546,
+        "distance": 0.8446
+      },
+      "7": {
+        "entropy": 0.1191,
+        "distance": 0.1255
+      }
+    },
+    "1": {
+      "0": {
+        "entropy": 1.0898,
+        "distance": 2.3615
+      },
+      "1": {
+        "entropy": 1.2086,
+        "distance": 1.6709
+      },
+      "2": {
+        "entropy": 0.9268,
+        "distance": 2.0877
+      },
+      "3": {
+        "entropy": 1.0877,
+        "distance": 1.955
+      },
+      "4": {
+        "entropy": 1.0894,
+        "distance": 2.5054
+      },
+      "5": {
+        "entropy": 1.2393,
+        "distance": 2.3488
+      },
+      "6": {
+        "entropy": 0.3151,
+        "distance": 0.93
+      },
+      "7": {
+        "entropy": 1.1631,
+        "distance": 1.7869
+      }
+    },
+    "2": {
+      "0": {
+        "entropy": 1.1599,
+        "distance": 2.1438
+      },
+      "1": {
+        "entropy": 1.1021,
+        "distance": 2.6436
+      },
+      "2": {
+        "entropy": 0.5773,
+        "distance": 0.9568
+      },
+      "3": {
+        "entropy": 0.8526,
+        "distance": 1.3635
+      },
+      "4": {
+        "entropy": 1.1953,
+        "distance": 2.0927
+      },
+      "5": {
+        "entropy": 1.2625,
+        "distance": 2.3299
+      },
+      "6": {
+        "entropy": 1.0728,
+        "distance": 2.1844
+      },
+      "7": {
+        "entropy": 0.8298,
+        "distance": 2.5584
+      }
+    },
+    "3": {
+      "0": {
+        "entropy": 0.6579,
+        "distance": 3.1181
+      },
+      "1": {
+        "entropy": 1.0381,
+        "distance": 2.499
+      },
+      "2": {
+        "entropy": 0.7486,
+        "distance": 2.7782
+      },
+      "3": {
+        "entropy": 0.6768,
+        "distance": 1.3756
+      },
+      "4": {
+        "entropy": 0.7949,
+        "distance": 3.1858
+      },
+      "5": {
+        "entropy": 0.9609,
+        "distance": 2.8374
+      },
+      "6": {
+        "entropy": 0.7949,
+        "distance": 3.0828
+      },
+      "7": {
+        "entropy": 0.8902,
+        "distance": 2.2415
+      }
+    },
+    "4": {
+      "0": {
+        "entropy": 0.8432,
+        "distance": 2.733
+      },
+      "1": {
+        "entropy": 0.8294,
+        "distance": 3.0951
+      },
+      "2": {
+        "entropy": 0.213,
+        "distance": 3.6789
+      },
+      "3": {
+        "entropy": 0.7892,
+        "distance": 2.8983
+      },
+      "4": {
+        "entropy": 0.7115,
+        "distance": 3.1621
+      },
+      "5": {
+        "entropy": 0.8829,
+        "distance": 2.1951
+      },
+      "6": {
+        "entropy": 1.0275,
+        "distance": 2.5071
+      },
+      "7": {
+        "entropy": 0.7601,
+        "distance": 2.7745
+      }
+    },
+    "5": {
+      "0": {
+        "entropy": 0.7495,
+        "distance": 3.1288
+      },
+      "1": {
+        "entropy": 0.4406,
+        "distance": 3.5693
+      },
+      "2": {
+        "entropy": 0.1597,
+        "distance": 3.8786
+      },
+      "3": {
+        "entropy": 0.6769,
+        "distance": 3.2913
+      },
+      "4": {
+        "entropy": 0.9982,
+        "distance": 2.3812
+      },
+      "5": {
+        "entropy": 0.4001,
+        "distance": 3.6601
+      },
+      "6": {
+        "entropy": 0.4323,
+        "distance": 3.4611
+      },
+      "7": {
+        "entropy": 0.9104,
+        "distance": 2.5712
+      }
+    }
+  }
+}
