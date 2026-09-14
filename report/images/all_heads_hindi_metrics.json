@@ -30,205 +30,253 @@
     "0": {
       "0": {
         "entropy": 0.7349,
-        "distance": 1.0261
+        "distance": 1.0261,
+        "role": "Local n-gram extractor"
       },
       "1": {
         "entropy": 0.3526,
-        "distance": 0.3131
+        "distance": 0.3131,
+        "role": "Hyper-local n-gram (sharp)"
       },
       "2": {
         "entropy": 0.2797,
-        "distance": 0.4732
+        "distance": 0.4732,
+        "role": "Hyper-local n-gram (sharp)"
       },
       "3": {
         "entropy": 0.5371,
-        "distance": 1.2049
+        "distance": 1.2049,
+        "role": "Local / phrase-level syntax"
       },
       "4": {
         "entropy": 1.1619,
-        "distance": 2.4998
+        "distance": 2.4998,
+        "role": "Mid-range relational binding"
       },
       "5": {
         "entropy": 1.0212,
-        "distance": 1.8792
+        "distance": 1.8792,
+        "role": "Local / phrase-level syntax"
       },
       "6": {
         "entropy": 1.135,
-        "distance": 1.9095
+        "distance": 1.9095,
+        "role": "Broad local / diffuse syntax"
       },
       "7": {
         "entropy": 0.5878,
-        "distance": 1.1554
+        "distance": 1.1554,
+        "role": "Local n-gram extractor"
       }
     },
     "1": {
       "0": {
         "entropy": 0.9503,
-        "distance": 2.2254
+        "distance": 2.2254,
+        "role": "Mid-range relational binding"
       },
       "1": {
         "entropy": 1.024,
-        "distance": 1.8184
+        "distance": 1.8184,
+        "role": "Local / phrase-level syntax"
       },
       "2": {
         "entropy": 0.7801,
-        "distance": 1.3655
+        "distance": 1.3655,
+        "role": "Local / phrase-level syntax"
       },
       "3": {
         "entropy": 1.1618,
-        "distance": 2.7788
+        "distance": 2.7788,
+        "role": "Mid-range relational binding"
       },
       "4": {
         "entropy": 1.2474,
-        "distance": 2.1169
+        "distance": 2.1169,
+        "role": "Broad local / diffuse syntax"
       },
       "5": {
         "entropy": 0.8773,
-        "distance": 2.1079
+        "distance": 2.1079,
+        "role": "Local / phrase-level syntax"
       },
       "6": {
         "entropy": 0.8126,
-        "distance": 1.9949
+        "distance": 1.9949,
+        "role": "Local / phrase-level syntax"
       },
       "7": {
         "entropy": 0.5887,
-        "distance": 1.0556
+        "distance": 1.0556,
+        "role": "Local n-gram extractor"
       }
     },
     "2": {
       "0": {
         "entropy": 1.1462,
-        "distance": 1.8987
+        "distance": 1.8987,
+        "role": "Broad local / diffuse syntax"
       },
       "1": {
         "entropy": 1.2713,
-        "distance": 2.5383
+        "distance": 2.5383,
+        "role": "Diffuse multi-token routing"
       },
       "2": {
         "entropy": 1.1554,
-        "distance": 3.0229
+        "distance": 3.0229,
+        "role": "Broad global context"
       },
       "3": {
         "entropy": 1.2431,
-        "distance": 2.1018
+        "distance": 2.1018,
+        "role": "Broad local / diffuse syntax"
       },
       "4": {
         "entropy": 1.3444,
-        "distance": 2.3256
+        "distance": 2.3256,
+        "role": "Diffuse multi-token routing"
       },
       "5": {
         "entropy": 1.3263,
-        "distance": 2.9649
+        "distance": 2.9649,
+        "role": "Diffuse multi-token routing"
       },
       "6": {
         "entropy": 1.3073,
-        "distance": 2.2821
+        "distance": 2.2821,
+        "role": "Diffuse multi-token routing"
       },
       "7": {
         "entropy": 0.8775,
-        "distance": 2.1797
+        "distance": 2.1797,
+        "role": "Local / phrase-level syntax"
       }
     },
     "3": {
       "0": {
         "entropy": 1.0108,
-        "distance": 3.1133
+        "distance": 3.1133,
+        "role": "Broad global context"
       },
       "1": {
         "entropy": 0.8366,
-        "distance": 1.7827
+        "distance": 1.7827,
+        "role": "Local / phrase-level syntax"
       },
       "2": {
         "entropy": 0.777,
-        "distance": 2.2521
+        "distance": 2.2521,
+        "role": "Mid-range relational binding"
       },
       "3": {
         "entropy": 1.0056,
-        "distance": 2.6515
+        "distance": 2.6515,
+        "role": "Mid-range relational binding"
       },
       "4": {
         "entropy": 1.0593,
-        "distance": 3.0441
+        "distance": 3.0441,
+        "role": "Broad global context"
       },
       "5": {
         "entropy": 0.9234,
-        "distance": 2.726
+        "distance": 2.726,
+        "role": "Mid-range relational binding"
       },
       "6": {
         "entropy": 0.7633,
-        "distance": 3.6355
+        "distance": 3.6355,
+        "role": "Long-range semantic content"
       },
       "7": {
         "entropy": 1.1681,
-        "distance": 2.6089
+        "distance": 2.6089,
+        "role": "Mid-range relational binding"
       }
     },
     "4": {
       "0": {
         "entropy": 1.0919,
-        "distance": 3.2322
+        "distance": 3.2322,
+        "role": "Broad global context"
       },
       "1": {
         "entropy": 0.3852,
-        "distance": 4.1142
+        "distance": 4.1142,
+        "role": "Strong Attention Sink / Punctuation sink"
       },
       "2": {
         "entropy": 0.8878,
-        "distance": 3.031
+        "distance": 3.031,
+        "role": "Long-range semantic content"
       },
       "3": {
         "entropy": 0.9889,
-        "distance": 2.8379
+        "distance": 2.8379,
+        "role": "Mid-range relational binding"
       },
       "4": {
         "entropy": 1.1983,
-        "distance": 2.8533
+        "distance": 2.8533,
+        "role": "Mid-range relational binding"
       },
       "5": {
         "entropy": 0.7308,
-        "distance": 3.0333
+        "distance": 3.0333,
+        "role": "Long-range semantic content"
       },
       "6": {
         "entropy": 0.4899,
-        "distance": 4.0698
+        "distance": 4.0698,
+        "role": "Strong Attention Sink / Punctuation sink"
       },
       "7": {
         "entropy": 1.1073,
-        "distance": 3.205
+        "distance": 3.205,
+        "role": "Broad global context"
       }
     },
     "5": {
       "0": {
         "entropy": 0.7357,
-        "distance": 3.7311
+        "distance": 3.7311,
+        "role": "Long-range semantic content"
       },
       "1": {
         "entropy": 1.1093,
-        "distance": 2.0804
+        "distance": 2.0804,
+        "role": "Broad local / diffuse syntax"
       },
       "2": {
         "entropy": 1.0272,
-        "distance": 3.1257
+        "distance": 3.1257,
+        "role": "Broad global context"
       },
       "3": {
         "entropy": 0.9714,
-        "distance": 2.9508
+        "distance": 2.9508,
+        "role": "Mid-range relational binding"
       },
       "4": {
         "entropy": 0.5166,
-        "distance": 4.0815
+        "distance": 4.0815,
+        "role": "Strong Attention Sink / Punctuation sink"
       },
       "5": {
         "entropy": 0.1641,
-        "distance": 4.3298
+        "distance": 4.3298,
+        "role": "Extreme Attention Sink (Token 0 offload)"
       },
       "6": {
         "entropy": 0.1702,
-        "distance": 4.2974
+        "distance": 4.2974,
+        "role": "Extreme Attention Sink (Token 0 offload)"
       },
       "7": {
         "entropy": 0.8435,
-        "distance": 3.394
+        "distance": 3.394,
+        "role": "Long-range semantic content"
       }
     }
   }

@@ -166,23 +166,91 @@ To comprehensively evaluate how internal representations evolve through the mode
 - **Hindi Benchmark:** `"भारत एक बहुत ही सुंदर और विशाल देश है।"` (10 tokens)
 - **Nepali Benchmark:** `"नेपाल एक धेरै सुन्दर र विशाल देश हो।"` (9 tokens)
 
-### 8.1 Diagnostic Metrics & Theoretical Framework
+---
 
-For each attention head $h \in \{0 \dots 7\}$ at layer $l \in \{0 \dots 5\}$, the attention matrix $A^{(l, h)} \in \mathbb{R}^{N \times N}$ is lower-triangular ($A_{ij} = 0$ for $j > i$) due to the causal autoregressive mask. Two complementary information-theoretic metrics were computed:
+### 8.1 Coordinate System & Mathematical Definition (X & Y Axes)
 
-1. **Mean Shannon Entropy ($\bar{\mathcal{H}}$):**
-   $$\mathcal{H}_i = -\sum_{j=0}^{i} A_{ij} \log_2 (A_{ij} + \epsilon), \quad \bar{\mathcal{H}} = \frac{1}{N} \sum_{i=0}^{N-1} \mathcal{H}_i$$
-   Lower entropy indicates concentrated, highly confident attention onto specific tokens (e.g. sharp syntax or attention sinks); higher entropy indicates diffuse context gathering.
+In all attention heatmaps presented across this report, the two-dimensional attention matrix $A \in \mathbb{R}^{N \times N}$ follows the standard mathematical and Transformer Cartesian convention:
 
-2. **Mean Attention Distance ($\bar{D}$):**
-   $$\bar{D} = \frac{1}{N} \sum_{i=0}^{N-1} \sum_{j=0}^{i} A_{ij} \cdot (i - j)$$
-   Measures the effective receptive span of each head. $\bar{D} < 1.5$ corresponds to local/n-gram focus; $\bar{D} > 3.0$ indicates global or long-range dependencies.
+```
+                          Key Tokens Kj (Attended Context Tokens) ---> [X-AXIS (Columns j)]
+                             Token 0     Token 1     Token 2  ...  Token N-1
+                          +-----------+-----------+-----------+---+-----------+
+   Query       Token 0    |  A[0, 0]  |  MASK (0) |  MASK (0) |   |  MASK (0) |
+   Tokens Qi   Token 1    |  A[1, 0]  |  A[1, 1]  |  MASK (0) |   |  MASK (0) |
+   (Current    Token 2    |  A[2, 0]  |  A[2, 1]  |  A[2, 2]  |   |  MASK (0) |
+   Attending      :       |     :     |     :     |     :     |   |  MASK (0) |
+   Position)   Token N-1  | A[N-1, 0] | A[N-1, 1] | A[N-1, 2] |...| A[N-1,N-1]|
+      |                   +-----------+-----------+-----------+---+-----------+
+      v
+  [Y-AXIS (Rows i)]
+```
+
+- **X-Coordinate (Horizontal Axis / Columns, $j$):**
+  - **Entity:** Represents the **Key Token ($K_j$)** / **Attended-to Context Token**.
+  - **Meaning:** This is the historical or current token in the sequence that is being looked at / receiving attention.
+  - **Direction:** Columns proceed horizontally from left ($j = 0$, first token) to right ($j = N-1$, final token).
+- **Y-Coordinate (Vertical Axis / Rows, $i$):**
+  - **Entity:** Represents the **Query Token ($Q_i$)** / **Attending Position / Currently Generating Token**.
+  - **Meaning:** This is the active token seeking relevant context from the preceding sequence to compute its hidden state and predict the next token.
+  - **Direction:** Rows proceed vertically from top ($i = 0$, sequence start) to bottom ($i = N-1$, sequence end).
+- **Cell Value $(i, j)$ & Color Intensity:**
+  - The color at coordinates $(i, j)$ represents the post-softmax attention weight:
+    $$A_{ij} = \text{Softmax}\left(\frac{Q_i K_j^\top}{\sqrt{d_k}}\right) = \frac{\exp(Q_i K_j^\top / \sqrt{d_k})}{\sum_{m=0}^{i} \exp(Q_i K_m^\top / \sqrt{d_k})} \in [0, 1]$$
+  - A bright yellow/green cell indicates high attention concentration ($A_{ij} \to 1.0$), whereas dark purple indicates near-zero attention ($A_{ij} \approx 0.0$).
+  - **Row Sum Property:** Every horizontal row $i$ sums strictly to 1.0 ($\sum_{j=0}^{i} A_{ij} = 1.0$) because Softmax is applied row-wise over the valid Key tokens.
+- **Causal Masking (Upper Triangular Dark Region, $j > i$):**
+  - In a causal autoregressive language model, a token at position $i$ cannot attend to future tokens ($j > i$).
+  - The upper-triangular logits are set to $-\infty$ prior to Softmax, forcing $A_{ij} \equiv 0.0$ for all $j > i$. This is why the upper triangle of every attention heatmap is completely dark purple.
+- **Key Geometric Patterns on the Map:**
+  1. **Main Diagonal Concentration ($j = i$ or $j = i-1$):** Indicates *local n-gram syntax*—the token attends primarily to itself or the word immediately preceding it.
+  2. **Vertical Column Stripe at $j = 0$:** Indicates an *Attention Sink*—almost all subsequent query positions $i$ dump unneeded attention mass into the first token as a harmless "no-op" valve.
+  3. **Vertical Column Stripe at Delimiter ($j = \text{Danda } ।$):** Indicates a *Sentence Boundary Sink*.
+  4. **Off-Diagonal Off-Column Hotspots:** Indicates *Relational / Long-Distance Semantic Routing* (e.g. subject-verb or adjective-noun bindings across multiple words).
 
 ---
 
-### 8.2 Master 6×8 Attention Grids (All 48 Heads)
+### 8.2 Diagnostic Metrics
 
-The master grids below display every attention head in the architecture simultaneously (rows: Layers 0 to 5; columns: Heads 0 to 7).
+Two quantitative information-theoretic metrics were computed across all 96 attention heads:
+
+1. **Mean Shannon Entropy ($\bar{\mathcal{H}}$):**
+   $$\mathcal{H}_i = -\sum_{j=0}^{i} A_{ij} \log_2 (A_{ij} + \epsilon), \quad \bar{\mathcal{H}} = \frac{1}{N} \sum_{i=0}^{N-1} \mathcal{H}_i$$
+   Measures attention focus vs. dispersion. Lower entropy = sharp, confident routing (e.g., attention sinks or strict local bigrams); higher entropy = diffuse, multi-token contextual pooling.
+
+2. **Mean Attention Distance ($\bar{D}$):**
+   $$\bar{D} = \frac{1}{N} \sum_{i=0}^{N-1} \sum_{j=0}^{i} A_{ij} \cdot (i - j)$$
+   Measures the average distance in tokens that query $i$ looks back into the past. $\bar{D} < 1.5$ indicates immediate local focus; $\bar{D} > 3.0$ indicates global/long-range dependencies.
+
+---
+
+### 8.3 Separate High-Resolution Archetype Heatmaps
+
+To clearly illustrate the four fundamental attention behaviors discovered in our models, the figures below isolate separate, high-resolution heatmaps for each archetype with fully annotated X and Y coordinate axes.
+
+#### Hindi: Four Core Attention Archetypes
+![Hindi Four Core Attention Archetypes](images/separate_heads_hindi_archetypes.png)
+
+*Comparison across the Hindi hierarchy:*
+1. **Hyper-Local N-Gram (L0 H1 - Mean Dist 0.31, Entropy 0.35):** Strict focus on the immediate diagonal ($j = i, i-1$); extracts consecutive subword bigrams.
+2. **Phrase / Relational Syntax (L1 H2 - Mean Dist 1.37, Entropy 0.78):** Looks 1–2 tokens back to bind adjectives and modifiers (`बहुत` + `ही` + `सुंदर`).
+3. **Long-Range Semantic Content (L5 H0 - Mean Dist 3.73, Entropy 0.74):** Queries at the end of the sentence look all the way back to the subject `भारत` and key descriptor `सुंदर`.
+4. **Attention Sink Offload (L5 H5 - Mean Dist 4.33, Entropy 0.16):** An intense, needle-sharp vertical stripe down column 0 (`भारत`); absorbs unneeded attention mass.
+
+#### Nepali: Four Core Attention Archetypes
+![Nepali Four Core Attention Archetypes](images/separate_heads_nepali_archetypes.png)
+
+*Comparison across the Nepali hierarchy:*
+1. **Hyper-Local N-Gram (L0 H7 - Mean Dist 0.13, Entropy 0.12):** Extreme local inductive bias; virtually 100% of attention mass is on the immediate predecessor.
+2. **Phrase / Relational Syntax (L2 H3 - Mean Dist 1.36, Entropy 0.85):** Binds noun phrases across intermediate particles (`धेरै` + `सुन्दर` $\to$ `विशाल देश`).
+3. **Long-Range Semantic Content (L5 H0 - Mean Dist 3.13, Entropy 0.75):** Broad contextual retrieval connecting verb `हो` and danda `।` to the country name `नेपाल`.
+4. **Attention Sink Offload (L5 H2 - Mean Dist 3.88, Entropy 0.16):** Over 95% of attention across all subsequent tokens routes directly into column 0 (`नेपाल`).
+
+---
+
+### 8.4 Master 6×8 Attention Grids (All 48 Heads)
+
+The master grids below display every attention head in the architecture simultaneously (rows: Layers 0 to 5; columns: Heads 0 to 7), with global X-axis (Key tokens) and Y-axis (Query tokens) coordinates.
 
 #### Hindi Model (48-Head Master Heatmap)
 ![Hindi All Layers and Heads](images/all_layers_all_heads_hindi.png)
@@ -192,7 +260,7 @@ The master grids below display every attention head in the architecture simultan
 
 ---
 
-### 8.3 Layer-Wise Aggregate Trajectory
+### 8.5 Layer-Wise Aggregate Trajectory
 
 Averaging metrics across all 8 heads in each layer reveals a clean, monotonic functional progression common to both models:
 
@@ -209,7 +277,7 @@ Averaging metrics across all 8 heads in each layer reveals a clean, monotonic fu
 
 ---
 
-### 8.4 Full 48-Head Quantitative Results: Hindi
+### 8.6 Full 48-Head Quantitative Results: Hindi
 
 | Layer | Head | Mean Entropy | Mean Distance | Functional Specialization |
 |:---:|:---:|:---:|:---:|:---|
@@ -264,7 +332,7 @@ Averaging metrics across all 8 heads in each layer reveals a clean, monotonic fu
 
 ---
 
-### 8.5 Full 48-Head Quantitative Results: Nepali
+### 8.7 Full 48-Head Quantitative Results: Nepali
 
 | Layer | Head | Mean Entropy | Mean Distance | Functional Specialization |
 |:---:|:---:|:---:|:---:|:---|
@@ -319,7 +387,7 @@ Averaging metrics across all 8 heads in each layer reveals a clean, monotonic fu
 
 ---
 
-### 8.6 Layer-by-Layer Architectural Walkthrough
+### 8.8 Layer-by-Layer Architectural Walkthrough
 
 #### Layer 0: Local Inductive Bias & Token Geometry
 - **Hindi L0:** ![Hindi Layer 0 Mosaics](images/all_heads/hindi_layer_0_all_heads.png)
@@ -353,7 +421,7 @@ Averaging metrics across all 8 heads in each layer reveals a clean, monotonic fu
 
 ---
 
-### 8.7 Cross-Lingual Comparison & Synthesis
+### 8.9 Cross-Lingual Comparison & Synthesis
 
 1. **Universality of Attention Sinks:** Both Indic models spontaneously develop first-token attention sinks in Layers 4–5 without explicit supervision. In Hindi, sink behavior is distributed across Heads 4, 5, and 6 in Layer 5 (entropies 0.16–0.51). In Nepali, it concentrates intensely on Head 2 starting from Layer 4 (entropy 0.21) and culminating in Layer 5 (entropy 0.16).
 2. **Grammatical Alignment:** Both languages show SOV structural awareness in middle layers: auxiliary verbs (`है`, `हो`) and sentence terminators (`।`) attend strongly across the clause back to the main subject (`भारत`, `नेपाल`) and predicative adjectives (`सुंदर`, `विशाल`), bridging the standard long-distance dependency characteristic of Indo-Aryan syntax.
