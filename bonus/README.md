@@ -53,7 +53,7 @@ Train the 36.8M parameter ablated model from scratch on the Hindi monolingual co
 ```bash
 ./lma_env/bin/python bonus/scripts/train_no_pos.py --max-steps 100 --val-interval 50 --save-interval 100
 ```
-*Checkpoints are saved to `bonus/checkpoints/best.pt` and `bonus/checkpoints/last.pt`. To resume an interrupted training run:*
+*Checkpoints are saved to `bonus/checkpoints/best.pt` and `bonus/checkpoints/last.pt` (permanently hosted on Google Drive: [Bonus Checkpoints Drive Folder](https://drive.google.com/drive/folders/1ArblvEJNsvsJuuYnDfUG6EE3VlbFn_Fe?usp=sharing)). To resume an interrupted training run:*
 ```bash
 ./lma_env/bin/python bonus/scripts/train_no_pos.py --resume bonus/checkpoints/last.pt
 ```

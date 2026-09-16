@@ -108,6 +108,7 @@ The Phase 3 paths above are rooted at `phase3/`: `phase3/configs/`,
 | Pretrained Checkpoint (`final.pt`) | Nepali | https://drive.google.com/file/d/1a7cVgfeJVn6-yiZWHhG2N4YwfBfJmdwh/view?usp=sharing |
 | Phase 3 finetuned checkpoints (`best.pt`, `last.pt`) | Hindi | https://drive.google.com/drive/folders/1SliWJWeMXxkpp7ybroLu3asjcFZnEQ7H?usp=sharing |
 | Phase 3 finetuned checkpoints (`best.pt`, `last.pt`) | Nepali | https://drive.google.com/drive/folders/1JEJy1XVYIse2uOeSo7_7pW7SiMrnj-vo?usp=sharing |
+| Bonus ablation checkpoints (`best.pt`, `last.pt`) | Hindi | https://drive.google.com/drive/folders/1ArblvEJNsvsJuuYnDfUG6EE3VlbFn_Fe?usp=sharing |
 
 ---
 
