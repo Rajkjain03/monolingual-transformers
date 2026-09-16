@@ -79,10 +79,11 @@ In strict adherence to course specifications:
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
 \caption{System Specifications and Hyperparameters at a Glance}
 \label{tab:system_overview}
-\begin{tabularx}{\columnwidth}{lXX}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Hyperparameter} & \textbf{Model H (Hindi)} & \textbf{Model L (Nepali)} \\
 \midrule
@@ -95,7 +96,7 @@ Model Dim ($d_{\text{model}}$) / $d_k$ & 512 / 64 & 512 / 64 \\
 FFN Dim ($d_{\text{ff}}$) & 2,048 (SwiGLU) & 2,048 (SwiGLU) \\
 Positional Embedding & RoPE ($\theta=10^4$) & RoPE ($\theta=10^4$) \\
 Normalization & RMSNorm ($\epsilon=10^{-6}$) & RMSNorm ($\epsilon=10^{-6}$) \\
-Weight Tying & Input/Output Tied & Input/Output Tied \\
+Weight Tying & In/Out Tied & In/Out Tied \\
 \textbf{Trainable Params} & \textbf{36,837,888} & \textbf{28,645,888} \\
 Training Compute & RTX 3050 (4GB) & RTX 3050 (4GB) \\
 \bottomrule
@@ -119,8 +120,9 @@ Q = HW_Q, \quad K = HW_K, \quad V = HW_V
 \end{equation}
 Tensors are reshaped to $(B, h, T, d_k)$. The attention matrix $A \in \mathbb{R}^{T \times T}$ is computed with a strictly lower-triangular causal mask $M$:
 \begin{equation}
-A = \text{softmax}\left( \frac{R(Q) R(K)^T}{\sqrt{d_k}} + M \right), \quad M_{ij} = \begin{cases} 0 & j \le i \\ -\infty & j > i \end{cases}
+A = \text{softmax}\left( \frac{R(Q) R(K)^T}{\sqrt{d_k}} + M \right)
 \end{equation}
+where $M_{ij} = 0$ for $j \le i$, and $M_{ij} = -\infty$ for $j > i$.
 The scaling factor $1/\sqrt{d_k} = 1/\sqrt{64} = 0.125$ counteracts dot-product variance growth that pushes softmax into vanishing gradient regimes.
 
 \paragraph{Empirical Causal Mask Verification:}
@@ -161,10 +163,11 @@ The data engineering pipeline was designed for memory safety and resumption. Raw
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
 \caption{Phase 1 Corpus Statistics and Token Accounting}
 \label{tab:phase1_stats}
-\begin{tabular}{lrr}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}Xrr@{}}
 \toprule
 \textbf{Corpus Metric} & \textbf{Hindi (Model H)} & \textbf{Nepali (Model L)} \\
 \midrule
@@ -173,11 +176,11 @@ Total Tokens (All Splits) & 681,200,436 & 775,992,967 \\
 \textbf{Training Tokens} & \textbf{613,059,508} & \textbf{698,466,193} \\
 Validation Tokens & 34,070,464 & 38,763,387 \\
 Test Tokens & 34,070,464 & 38,763,387 \\
-Manual Tokens & 6,777,503 (1.11\%) & 322,028 (0.05\%) \\
-Downloaded Tokens & 606,282,005 (98.89\%) & 698,144,165 (99.95\%) \\
+Manual Tokens & 6.78M (1.11\%) & 0.32M (0.05\%) \\
+Downloaded Tokens & 606.28M (98.89\%) & 698.14M (99.95\%) \\
 Database Size on Disk & 8.0 GB & 11.0 GB \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \noindent\textit{Transparent Note on Manual Data Target:} The initial guidelines targeted $\ge 20\%$ manual data. Because achieving optimal pretraining under Chinchilla scaling required exceeding 600M tokens, manual OCR collection represented 1.11\% in Hindi and 0.05\% in Nepali. This trade-off prioritized compute-optimal token volume over manual OCR noise.
@@ -191,20 +194,21 @@ Independent SentencePiece Byte-Pair Encoding (BPE) tokenizers were trained from 
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{3.0pt}
 \caption{Tokenizer Quality and Subword Diagnostics}
 \label{tab:tokenizer_stats}
-\begin{tabular}{lrr}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}Xcc@{}}
 \toprule
 \textbf{Tokenizer Diagnostic} & \textbf{Hindi Tokenizer} & \textbf{Nepali Tokenizer} \\
 \midrule
-Algorithm & SentencePiece BPE & SentencePiece BPE \\
+Algorithm & \multicolumn{2}{c}{SentencePiece BPE} \\
 Vocabulary Size & 32,000 tokens & 16,000 tokens \\
 Avg. Characters / Token & 4.12 & 4.59 \\
-\textbf{Fertility Rate (Tokens/Word)} & \textbf{1.24} & \textbf{1.40} \\
+\textbf{Fertility (Tokens/Word)} & \textbf{1.24} & \textbf{1.40} \\
 \textbf{Validation UNK Rate} & \textbf{0.0485\%} & \textbf{0.1585\%} \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \noindent\textbf{Key Finding:} Nepali exhibits significantly higher fertility (1.40 vs. 1.24 tokens/word) and a $3.27\times$ higher out-of-vocabulary rate (0.1585\% vs. 0.0485\%). This structural fragmentation creates greater cognitive load for Model L, as words are split into smaller particles.
@@ -231,10 +235,11 @@ Models were evaluated on their respective held-out test sets across intrinsic lo
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
 \caption{Phase 2 Comprehensive Test Evaluation}
 \label{tab:phase2_results}
-\begin{tabularx}{\columnwidth}{lXX}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}Xcc@{}}
 \toprule
 \textbf{Metric} & \textbf{Hindi (Model H)} & \textbf{Nepali (Model L)} \\
 \midrule
@@ -296,10 +301,11 @@ For each head $h$ at layer $l$, two metrics were computed:
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
 \caption{Layer-Wise Aggregate Attention Trajectory (All 48 Heads)}
 \label{tab:layer_trajectory}
-\begin{tabular}{lcccc}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}Xcccc@{}}
 \toprule
 & \multicolumn{2}{c}{\textbf{Hindi (Model H)}} & \multicolumn{2}{c}{\textbf{Nepali (Model L)}} \\
 \cmidrule(lr){2-3} \cmidrule(lr){4-5}
@@ -307,17 +313,19 @@ For each head $h$ at layer $l$, two metrics were computed:
 \midrule
 Layer 0 & 0.7263 & 1.3076 & 0.7207 & 1.1908 \\
 Layer 1 & 0.9303 & 1.9329 & 1.0150 & 1.9558 \\
-Layer 2 & \textbf{1.2089} (peak) & 2.4143 & \textbf{1.0065} (peak) & 2.0341 \\
+Layer 2 & \textbf{1.2089}$^*$ & 2.4143 & \textbf{1.0065}$^*$ & 2.0341 \\
 Layer 3 & 0.9430 & 2.7268 & 0.8203 & 2.6398 \\
 Layer 4 & 0.8600 & 3.2971 & 0.7571 & 2.8805 \\
-Layer 5 & \textbf{0.6923} (min) & \textbf{3.4988} (max) & \textbf{0.5960} (min) & \textbf{3.2427} (max) \\
+Layer 5 & \textbf{0.6923}$^\dagger$ & \textbf{3.4988}$^\ddagger$ & \textbf{0.5960}$^\dagger$ & \textbf{3.2427}$^\ddagger$ \\
 \bottomrule
-\end{tabular}
+\multicolumn{5}{l}{\scriptsize $^*$Peak entropy; $^\dagger$minimum entropy; $^\ddagger$maximum distance.}
+\end{tabularx}
 \end{table}
 
 \begin{table*}[t]
 \centering
-\small
+\scriptsize
+\setlength{\tabcolsep}{2.0pt}
 \caption{Complete 48-Head Quantitative Attention Diagnostics Across All Layers and Heads for Hindi and Nepali}
 \label{tab:all_48_heads}
 \begin{tabular}{ccccccc|ccccccc}
@@ -418,16 +426,17 @@ To guarantee zero-shot generalization without memorization:
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{2.0pt}
 \caption{Phase 3 Reasoning Dataset Partitions}
 \label{tab:reasoning_splits}
-\begin{tabularx}{\columnwidth}{lrrrX}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}lrrr>{\raggedright\arraybackslash}X@{}}
 \toprule
-\textbf{Split} & \textbf{Direct} & \textbf{Trans.} & \textbf{Total} & \textbf{Attribute Domain \& Entities} \\
+\textbf{Split} & \textbf{Dir.} & \textbf{Trans.} & \textbf{Total} & \textbf{Domain \& Entities} \\
 \midrule
-Train & 1,800 & 1,800 & 3,600 & Height, Age, Quantity (40 Seen) \\
-Val & 200 & 200 & 400 & Height, Age, Quantity (40 Seen) \\
-\textbf{Test} & 200 & 200 & \textbf{400} & \textbf{Price Only (10 Held-out Names)} \\
+Train & 1,800 & 1,800 & 3,600 & Height, Age, Qty (40 Seen) \\
+Val & 200 & 200 & 400 & Height, Age, Qty (40 Seen) \\
+\textbf{Test} & 200 & 200 & \textbf{400} & \textbf{Price Only (10 Held-out)} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -459,20 +468,23 @@ Evaluation measured exact-match accuracy against held-out entities under greedy 
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
 \caption{Exact-Match Reasoning Accuracy: Pretrained vs. Finetuned}
 \label{tab:reasoning_results}
-\begin{tabular}{lcccc}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}Xcccc@{}}
 \toprule
-\textbf{Task Category} & \textbf{Hindi Pre} & \textbf{Hindi SFT} & \textbf{Nep Pre} & \textbf{Nep SFT} \\
+& \multicolumn{2}{c}{\textbf{Hindi}} & \multicolumn{2}{c}{\textbf{Nepali}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+\textbf{Task Category} & \textbf{Pre} & \textbf{SFT} & \textbf{Pre} & \textbf{SFT} \\
 \midrule
-Direct Comparison (200) & 21.0\% & \textbf{52.0\%} & 1.0\% & \textbf{28.5\%} \\
-Transitive Chaining (200) & 3.0\% & \textbf{43.5\%} & 0.0\% & \textbf{20.5\%} \\
+Direct Comp. (200) & 21.0\% & \textbf{52.0\%} & 1.0\% & \textbf{28.5\%} \\
+Transitive Chain (200) & 3.0\% & \textbf{43.5\%} & 0.0\% & \textbf{20.5\%} \\
 \midrule
 \textbf{Overall Acc. (400)} & \textbf{12.0\%} & \textbf{47.75\%} & \textbf{0.5\%} & \textbf{24.50\%} \\
 \textbf{Absolute Gain} & \multicolumn{2}{c}{\textbf{+35.75\%}} & \multicolumn{2}{c}{\textbf{+24.00\%}} \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \subsection{Qualitative Error Analysis and Failure Modes}
@@ -519,12 +531,13 @@ The ablated model was trained on the Hindi corpus under identical hyperparameter
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{2.2pt}
 \caption{Metric Comparison: Standard Model H vs. Ablated Model H}
 \label{tab:ablation_results}
-\begin{tabularx}{\columnwidth}{lXXX}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}Xccc@{}}
 \toprule
-\textbf{Metric} & \textbf{Standard (RoPE)} & \textbf{Ablated (No Pos)} & \textbf{Ablation Impact} \\
+\textbf{Metric} & \textbf{Standard} & \textbf{Ablated} & \textbf{Impact} \\
 \midrule
 Cross-Entropy & \textbf{4.0162} & 7.8701 & $+3.8539$ \\
 \textbf{Perplexity (PPL)} & \textbf{55.49} & \textbf{2,617.74} & $\mathbf{\times 47.2}$ explosion \\
@@ -583,27 +596,28 @@ L5 Attn Distance & \textbf{7.4210} & 2.5421 & $-4.88$ collapse \\
 
 \begin{table}[H]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
 \caption{Master Index of Project Deliverables and Checkpoints}
 \label{tab:deliverable_index}
-\begin{tabularx}{\columnwidth}{lX}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Deliverable} & \textbf{Resource / Drive Link / Repository Path} \\
 \midrule
 Phase 1 Code & \path{hindi/scripts/}, \path{nepali/scripts/} \\
 Tokenizers & \path{hindi/tokenizer/}, \path{nepali/tokenizer/} \\
-Phase 1 Data Splits & \href{https://drive.google.com/drive/folders/1WXVGFmtd4bqrctrEArb3Y-tlOfAA55dF?usp=sharing}{Hindi Splits} / \href{https://drive.google.com/drive/folders/1Lq7IYyVIRJTbLPG1fdc2if_RiI713HS7?usp=sharing}{Nepali Splits} \\
-SQLite Databases & \href{https://drive.google.com/file/d/1EaZsr74aLL0g70TVOkbckQr62NDk90CH/view?usp=sharing}{Hindi DB (8GB)} / \href{https://drive.google.com/file/d/1avTD7KQ92QcKJojcmqSV3jb4bW1q3vHH/view?usp=sharing}{Nepali DB (11GB)} \\
+Phase 1 Splits & \href{https://drive.google.com/drive/folders/1WXVGFmtd4bqrctrEArb3Y-tlOfAA55dF?usp=sharing}{Hindi Splits} / \href{https://drive.google.com/drive/folders/1Lq7IYyVIRJTbLPG1fdc2if_RiI713HS7?usp=sharing}{Nepali Splits} \\
+SQLite DBs & \href{https://drive.google.com/file/d/1EaZsr74aLL0g70TVOkbckQr62NDk90CH/view?usp=sharing}{Hindi DB (8GB)} / \href{https://drive.google.com/file/d/1avTD7KQ92QcKJojcmqSV3jb4bW1q3vHH/view?usp=sharing}{Nepali DB (11GB)} \\
 \midrule
 Phase 2 Code & \path{hindi/scripts/model.py}, \path{train.py}, \path{evaluate.py} \\
-Pretrained Checkpoints & \href{https://drive.google.com/file/d/1QpTcnaJEnypQP3c9NFM790h3enfT7xlm/view?usp=sharing}{Hindi final.pt (422M)} / \href{https://drive.google.com/file/d/1a7cVgfeJVn6-yiZWHhG2N4YwfBfJmdwh/view?usp=sharing}{Nepali final.pt (328M)} \\
-Phase 2 Heatmap Scripts & \path{report/scripts/generate_all_head_heatmaps.py} \\
+Pretrained Pts & \href{https://drive.google.com/file/d/1QpTcnaJEnypQP3c9NFM790h3enfT7xlm/view?usp=sharing}{Hindi final.pt} / \href{https://drive.google.com/file/d/1a7cVgfeJVn6-yiZWHhG2N4YwfBfJmdwh/view?usp=sharing}{Nepali final.pt} \\
+Heatmap Code & \path{report/scripts/generate_all_head_heatmaps.py} \\
 \midrule
 Phase 3 Code & \path{phase3/scripts/generate_reasoning_data.py}, \path{finetune_reasoning.py} \\
-Finetuned Checkpoints & \href{https://drive.google.com/drive/folders/1SliWJWeMXxkpp7ybroLu3asjcFZnEQ7H?usp=sharing}{Hindi best.pt} / \href{https://drive.google.com/drive/folders/1JEJy1XVYIse2uOeSo7_7pW7SiMrnj-vo?usp=sharing}{Nepali best.pt} \\
-Phase 3 Reasoning Data & \path{phase3/data/hindi/}, \path{phase3/data/nepali/} \\
+Finetuned Pts & \href{https://drive.google.com/drive/folders/1SliWJWeMXxkpp7ybroLu3asjcFZnEQ7H?usp=sharing}{Hindi best.pt} / \href{https://drive.google.com/drive/folders/1JEJy1XVYIse2uOeSo7_7pW7SiMrnj-vo?usp=sharing}{Nepali best.pt} \\
+Reasoning Data & \path{phase3/data/hindi/}, \path{phase3/data/nepali/} \\
 \midrule
-Bonus Ablation Code & \path{bonus/scripts/model_no_pos.py}, \path{train_no_pos.py} \\
+Ablation Code & \path{bonus/scripts/model_no_pos.py}, \path{train_no_pos.py} \\
 Bonus Reports & \path{bonus/report.md}, \path{report/bonus_report.md} \\
 Repository & \href{https://github.com/CL3-410/individual-project-Rajkjain03/tree/phase-3}{GitHub Repository (phase-3 branch)} \\
 \bottomrule
