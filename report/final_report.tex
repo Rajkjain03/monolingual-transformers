@@ -1,7 +1,7 @@
-\documentclass[10pt,twocolumn,a4paper]{article}
+\documentclass[10pt,a4paper]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage[top=0.65in,bottom=0.68in,left=0.65in,right=0.65in,headheight=13pt,headsep=12pt,columnsep=0.22in]{geometry}
+\usepackage[top=0.65in,bottom=0.68in,left=0.65in,right=0.65in,headheight=13pt,headsep=12pt]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \graphicspath{{images/}{report/images/}{../report/images/}}
@@ -19,9 +19,21 @@
 \usepackage{titlesec}
 
 % Compact section headings to optimize space and ensure strict <= 10 page compliance
-\titlespacing*{\section}{0pt}{7pt plus 1.5pt minus 1.5pt}{3pt plus 1pt minus 1pt}
-\titlespacing*{\subsection}{0pt}{5pt plus 1pt minus 1pt}{2pt plus 0.5pt minus 0.5pt}
-\titlespacing*{\subsubsection}{0pt}{3.5pt plus 1pt minus 0.5pt}{1.5pt plus 0.5pt minus 0.5pt}
+\titlespacing*{\section}{0pt}{6pt plus 1.5pt minus 1.5pt}{2.5pt plus 1pt minus 1pt}
+\titlespacing*{\subsection}{0pt}{4.5pt plus 1pt minus 1pt}{2pt plus 0.5pt minus 0.5pt}
+\titlespacing*{\subsubsection}{0pt}{3pt plus 1pt minus 0.5pt}{1.5pt plus 0.5pt minus 0.5pt}
+
+% Float placement optimization for single-column layout
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.80}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+\renewcommand{\textfraction}{0.10}
+\renewcommand{\floatpagefraction}{0.80}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
 
 \hypersetup{
     colorlinks=true,
@@ -34,7 +46,7 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small\textsf{Language Models and Agents (Monsoon 2026) --- Consolidated 3-Phase Report}}
+\fancyhead[L]{\small\textsf{Language Models and Agents (Monsoon 2026)}}
 \fancyhead[R]{\small\textsf{Raj k jain (Roll No. 2025201036)}}
 \fancyfoot[C]{\small\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
@@ -46,23 +58,18 @@
   \renewcommand{\headrulewidth}{0pt}
 }
 
-\title{\vspace{-1.2em}\textbf{\Large From-Scratch Monolingual Transformer Language Models for Hindi and Nepali: Pretraining, Diagnostic Attention Dynamics, Reasoning Finetuning, and Positional Ablation}\vspace{-0.5em}}
-\author{\textbf{Raj k jain} \quad\textbullet\quad Roll No.: \texttt{2025201036} \quad\textbullet\quad \texttt{raj.jain@students.iiit.ac.in} \\
-\small International Institute of Information Technology, Hyderabad (IIIT-H)\vspace{-1.0em}}
+\title{\vspace{-1.2em}\textbf{\Large From-Scratch Monolingual Transformer Language Models for Hindi and Nepali: Pretraining, Diagnostic Attention Dynamics, Reasoning Finetuning, and Positional Ablation}\vspace{-0.4em}}
+\author{\textbf{Raj k jain} \quad\textbullet\quad Roll No.: \texttt{2025201036} \quad\textbullet\quad \texttt{raj.jain@students.iiit.ac.in}\vspace{-0.8em}}
 \date{\vspace{-0.6em}\small September 2026}
 
 \begin{document}
 
-\twocolumn[
-  \begin{@twocolumnfalse}
-    \maketitle
-    \begin{abstract}
-    \small
-    This report provides a unified, first-principles scientific account of building, pretraining, evaluating, analyzing, and finetuning two completely independent decoder-only Transformer language models for two Indian languages written in Devanagari: Hindi (\textbf{Model H}, higher-resource tier) and Nepali (\textbf{Model L}, lower-resource tier). Neither pretrained models, tokenizers, nor third-party Transformer abstractions were utilized. In \textbf{Phase 1}, monolingual corpora exceeding 600M tokens per language were curated, cleaned, and partitioned into SQLite databases, followed by training custom SentencePiece BPE tokenizers from scratch (32,000 vocab for Hindi; 16,000 vocab for Nepali), revealing an inverse relationship between subword fertility and downstream vocabulary efficiency. In \textbf{Phase 2}, custom 6-layer, 8-head, 512-dimension decoder-only Transformers equipped with Rotary Position Embeddings (RoPE), pre-norm RMSNorm, SwiGLU feed-forward networks, and student-implemented causal masking were pretrained under optimal Chinchilla compute budgets using AdamW and cosine scheduling. Comprehensive evaluations established a crucial divergence: while Nepali achieved lower cross-entropy loss (3.63 vs. 4.02) and perplexity (37.71 vs. 55.49), Hindi exhibited substantially stronger sentential generation coherence (BLEU-4 of 3.51 vs. 0.00; chrF of 9.19 vs. 4.43) owing to severe train-val generalization gaps in Hindi and morphological predictability in Nepali. To fulfill evaluation feedback, exhaustive attention diagnostics were conducted across \textbf{all 48 heads per model}, establishing an explicit Cartesian coordinate framework ($X$: Key context token, $Y$: Query attending token) and identifying a monotonic expansion of attention span alongside the spontaneous emergence of terminal attention sinks. In \textbf{Phase 3}, deterministic synthetic comparative- and transitive-reasoning datasets with strict leakage controls (20\% held-out entity names; 100\% test-only attribute) were constructed, and supervised finetuning with masked-prompt loss yielded dramatic accuracy gains (+35.75\% in Hindi; +24.00\% in Nepali) while actively dismantling pathological attention sinks. Finally, an \textbf{Ablation Study} retrained the 36.84M parameter Hindi model with positional encodings completely excised, mathematically and empirically proving how self-attention degenerates into word-order permutation invariance, catastrophic autoregressive loops (repetition surges to 71.6\%), and a 47-fold perplexity explosion.
-    \end{abstract}
-    \vspace{0.8em}
-  \end{@twocolumnfalse}
-]
+\maketitle
+\begin{abstract}
+\small
+This report provides a unified, first-principles scientific account of building, pretraining, evaluating, analyzing, and finetuning two completely independent decoder-only Transformer language models for two Indian languages written in Devanagari: Hindi (\textbf{Model H}, higher-resource tier) and Nepali (\textbf{Model L}, lower-resource tier). Neither pretrained models, tokenizers, nor third-party Transformer abstractions were utilized. In \textbf{Phase 1}, monolingual corpora exceeding 600M tokens per language were curated, cleaned, and partitioned into SQLite databases, followed by training custom SentencePiece BPE tokenizers from scratch (32,000 vocab for Hindi; 16,000 vocab for Nepali), revealing an inverse relationship between subword fertility and downstream vocabulary efficiency. In \textbf{Phase 2}, custom 6-layer, 8-head, 512-dimension decoder-only Transformers equipped with Rotary Position Embeddings (RoPE), pre-norm RMSNorm, SwiGLU feed-forward networks, and student-implemented causal masking were pretrained under optimal Chinchilla compute budgets using AdamW and cosine scheduling. Comprehensive evaluations established a crucial divergence: while Nepali achieved lower cross-entropy loss (3.63 vs. 4.02) and perplexity (37.71 vs. 55.49), Hindi exhibited substantially stronger sentential generation coherence (BLEU-4 of 3.51 vs. 0.00; chrF of 9.19 vs. 4.43) owing to severe train-val generalization gaps in Hindi and morphological predictability in Nepali. To fulfill evaluation feedback, exhaustive attention diagnostics were conducted across \textbf{all 48 heads per model}, establishing an explicit Cartesian coordinate framework ($X$: Key context token, $Y$: Query attending token) and identifying a monotonic expansion of attention span alongside the spontaneous emergence of terminal attention sinks. In \textbf{Phase 3}, deterministic synthetic comparative- and transitive-reasoning datasets with strict leakage controls (20\% held-out entity names; 100\% test-only attribute) were constructed, and supervised finetuning with masked-prompt loss yielded dramatic accuracy gains (+35.75\% in Hindi; +24.00\% in Nepali) while actively dismantling pathological attention sinks. Finally, an \textbf{Ablation Study} retrained the 36.84M parameter Hindi model with positional encodings completely excised, mathematically and empirically proving how self-attention degenerates into word-order permutation invariance, catastrophic autoregressive loops (repetition surges to 71.6\%), and a 47-fold perplexity explosion.
+\end{abstract}
+\vspace{0.8em}
 
 \section{Introduction and Architecture Formulation}
 
@@ -322,7 +329,7 @@ Layer 5 & \textbf{0.6923}$^\dagger$ & \textbf{3.4988}$^\ddagger$ & \textbf{0.596
 \end{tabularx}
 \end{table}
 
-\begin{table*}[t]
+\begin{table}[htbp]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{2.0pt}
@@ -361,9 +368,9 @@ L2 & H6 & 1.31 & 2.28 & Diffuse pool & 1.07 & 2.18 & L5 & H6 & 0.17 & 4.30 & Ext
 L2 & H7 & 0.88 & 2.18 & Phrase syntax & 0.83 & 2.56 & L5 & H7 & 0.84 & 3.39 & Semantic & 0.91 & 2.57 \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
-\begin{figure*}[t]
+\begin{figure}[htbp]
 \centering
 \begin{subfigure}[b]{0.49\textwidth}
     \includegraphics[width=\textwidth]{images/separate_heads_hindi_archetypes.png}
@@ -376,7 +383,7 @@ L2 & H7 & 0.88 & 2.18 & Phrase syntax & 0.83 & 2.56 & L5 & H7 & 0.84 & 3.39 & Se
 \end{subfigure}
 \caption{Separate high-resolution attention heatmaps illustrating the four primary functional archetypes discovered in our models. $X$-axis = Key token $K_j$ (context receiving attention); $Y$-axis = Query token $Q_i$ (attending position). Dark purple upper triangle = causal mask ($0.0$).}
 \label{fig:archetype_heatmaps}
-\end{figure*}
+\end{figure}
 
 \subsection{Four Core Functional Attention Archetypes}
 Figure~\ref{fig:archetype_heatmaps} displays separate high-resolution heatmaps for the four primary archetypes identified across both models:
@@ -390,7 +397,7 @@ Figure~\ref{fig:archetype_heatmaps} displays separate high-resolution heatmaps f
 \subsection{Master 6x8 Attention Grids}
 Figure~\ref{fig:master_grids} presents the complete 48-head attention maps for Hindi and Nepali, displaying all 6 layers (rows) and 8 heads (columns) simultaneously. In both languages, the transition from local diagonal banding (top rows) to vertical attention sink columns (bottom rows) is universally evident.
 
-\begin{figure*}[t]
+\begin{figure}[htbp]
 \centering
 \begin{subfigure}[b]{0.49\textwidth}
     \includegraphics[width=\textwidth]{images/all_layers_all_heads_hindi.png}
@@ -403,7 +410,7 @@ Figure~\ref{fig:master_grids} presents the complete 48-head attention maps for H
 \end{subfigure}
 \caption{Complete 48-head attention heatmaps across all 6 layers and 8 heads for Hindi and Nepali. Rows correspond to Layers 0--5; columns correspond to Heads 0--7. Both models demonstrate uniform structural evolution: early diagonal localization transitioning to late-layer semantic routing and first-token attention sinks.}
 \label{fig:master_grids}
-\end{figure*}
+\end{figure}
 
 \section{Phase 3: Reasoning Finetuning and Attention Redistribution}
 
@@ -448,7 +455,7 @@ Finetuning started from each model's Phase 2 pretrained checkpoint (\texttt{fina
     \item \textbf{Hyperparameters:} AdamW ($\text{lr}=2\times 10^{-5}, \beta_1=0.9, \beta_2=0.95, \text{wd}=0.01$), batch size 4, gradient accumulation 16 (effective batch 64), 5 epochs, cosine schedule, gradient clipping at 1.0.
 \end{itemize}
 
-\begin{figure*}[t]
+\begin{figure}[htbp]
 \centering
 \begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\textwidth]{images/phase3_hindi_finetuning_loss.png}
@@ -461,7 +468,7 @@ Finetuning started from each model's Phase 2 pretrained checkpoint (\texttt{fina
 \end{subfigure}
 \caption{Phase 3 supervised reasoning finetuning loss trajectories for Model H (Hindi) and Model L (Nepali).}
 \label{fig:phase3_finetune_loss}
-\end{figure*}
+\end{figure}
 
 \subsection{Reasoning Evaluation Results}
 Evaluation measured exact-match accuracy against held-out entities under greedy decoding.
@@ -500,30 +507,20 @@ Analyzing attention heatmaps before and after SFT on reasoning prompts revealed 
     \item \textbf{Dismantling Pathological Sinks (Nepali L5H2):} In pretrained Model L, Layer 5 Head 2 acted as an extreme sink (entropy 0.68, distance 12.48 tokens), dumping mass onto delimiters. Finetuning broke this pathological sink: distance contracted to \textbf{8.20 tokens} and entropy rose to \textbf{0.87}, redirecting capacity to semantic tokens.
 \end{itemize}
 
-\begin{figure*}[t]
+\begin{figure}[htbp]
 \centering
-\begin{subfigure}[b]{0.49\textwidth}
+\begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\textwidth]{images/phase3/hindi/L5_H0_pretrained_vs_finetuned.png}
     \caption{Hindi: Pretrained vs. Finetuned Attention (Layer 5 Head 0)}
 \end{subfigure}
 \hfill
-\begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{images/phase3/nepali/L5_H0_pretrained_vs_finetuned.png}
-    \caption{Nepali: Pretrained vs. Finetuned Attention (Layer 5 Head 0)}
-\end{subfigure}
-\vspace{0.4em}
-\begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{images/phase3/hindi/L5_H2_pretrained_vs_finetuned.png}
-    \caption{Hindi: Pretrained vs. Finetuned Attention (Layer 5 Head 2, Sink Dismantling)}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.49\textwidth}
+\begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\textwidth]{images/phase3/nepali/L5_H2_pretrained_vs_finetuned.png}
     \caption{Nepali: Pretrained vs. Finetuned Attention (Layer 5 Head 2, Sink Dismantling)}
 \end{subfigure}
-\caption{High-resolution Pretrained vs. Supervised Finetuned attention maps on reasoning prompts across Hindi and Nepali. Finetuning visibly sharpens relational focus (contracting receptive token distance in L5H0) and dismantles pathological token-0 sinks (redirecting attention mass to entity tokens in L5H2).}
+\caption{Pretrained vs. Supervised Finetuned attention maps on reasoning prompts across Hindi and Nepali. Finetuning visibly sharpens relational focus (contracting receptive token distance in L5H0) and dismantles pathological token-0 sinks (redirecting attention mass to entity tokens in L5H2).}
 \label{fig:phase3_attn_comparison}
-\end{figure*}
+\end{figure}
 
 \section{Bonus: Positional Ablation Study (No Positional Embeddings)}
 
@@ -563,7 +560,7 @@ L5 Attn Distance & \textbf{7.4210} & 2.5421 & $-4.88$ collapse \\
 \end{tabularx}
 \end{table}
 
-\begin{figure*}[t]
+\begin{figure}[htbp]
 \centering
 \begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\textwidth]{images/loss_curve_no_pos.png}
@@ -572,21 +569,11 @@ L5 Attn Distance & \textbf{7.4210} & 2.5421 & $-4.88$ collapse \\
 \hfill
 \begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\textwidth]{images/bonus/standard_vs_nopos_comparison.png}
-    \caption{Standard Attention (RoPE) vs. Ablated Attention (No Positional Embeddings)}
+    \caption{Generation and Fluency Degradation (Standard vs. Ablated)}
 \end{subfigure}
-\vspace{0.4em}
-\begin{subfigure}[b]{0.48\textwidth}
-    \includegraphics[width=\textwidth]{images/attn_L0_H0_no_pos.png}
-    \caption{Ablated Layer 0 Head 0 (Loss of Local Diagonal Banding)}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.48\textwidth}
-    \includegraphics[width=\textwidth]{images/attn_L5_H2_no_pos.png}
-    \caption{Ablated Layer 5 Head 2 (Loss of Structured Long-Range Routing)}
-\end{subfigure}
-\caption{Comprehensive quantitative and qualitative diagnostics of the Positional Ablation Study. Excising positional embeddings leads to an instantaneous optimization plateau at loss $\sim 7.87$, uniform diffusion of attention mass across the multiset, and total disruption of both syntactic n-gram banding and long-range semantic routing.}
+\caption{Quantitative diagnostics of the Positional Ablation Study. Excising positional embeddings leads to an instantaneous optimization plateau at loss $\sim 7.87$ (left) and severe collapse in syntactic generation coherence and lexical diversity (right).}
 \label{fig:bonus_attn}
-\end{figure*}
+\end{figure}
 
 \subsection{What Breaks Without Position Information?}
 \begin{enumerate}[noitemsep,leftmargin=*]
@@ -601,7 +588,7 @@ L5 Attn Distance & \textbf{7.4210} & 2.5421 & $-4.88$ collapse \\
 \begin{enumerate}[noitemsep,leftmargin=*]
     \item \textbf{Why Attention Requires $1/\sqrt{d_k}$ Scaling:} In high dimensions $d_k$, if components of $q$ and $k$ are independent random variables with zero mean and unit variance, their dot product $q^T k = \sum_{i=1}^{d_k} q_i k_i$ has mean 0 and variance $d_k$. As $d_k$ grows (here $d_k=64$), dot products become very large in magnitude, pushing the softmax into regions with extremely small gradients. Dividing by $\sqrt{d_k}$ restores unit variance, stabilizing backpropagation.
     \item \textbf{Why Upper Triangular Matrix is Masked and Set to Zero:} In causal auto-regressive generation, token $i$ must not attend to future tokens $j > i$. This is implemented by adding an upper-triangular matrix $M$ where $M_{ij} = -\infty$ for $j > i$ to the logits prior to softmax. Since $\exp(-\infty) = 0$, the post-softmax probabilities $A_{ij}$ in the upper triangle evaluate to strictly $0.0$, producing the characteristic dark purple region in all our heatmaps.
-    \item \textbf{The Relation Between Cross-Entropy, Perplexity, and Bits-Per-Byte:} Cross-entropy loss $\mathcal{L} = -\frac{1}{N} \sum_{i=1}^N \ln P(w_i | w_{<i})$. Perplexity is the exponentiated loss $\text{PPL} = \exp(\mathcal{L})$, representing the effective branching factor. Bits-Per-Byte ($\text{BPB} = \frac{\mathcal{L}}{\ln 2} \times \frac{N_{\text{tokens}}}{N_{\text{bytes}}}$) measures compression efficiency independent of vocabulary size.
+    \item \textbf{The Relation Between Cross-Entropy, Perplexity, and Bits-Per-Byte:} Cross-entropy loss is given by $\mathcal{L} = -\frac{1}{N} \sum_{i=1}^N \ln P(w_i \mid w_{<i})$. Perplexity is the exponentiated loss $\text{PPL} = \exp(\mathcal{L})$, measuring branching uncertainty. Bits-Per-Byte ($\text{BPB} = \frac{\mathcal{L}}{\ln 2} \cdot \frac{N_{\text{tokens}}}{N_{\text{bytes}}}$) evaluates compression efficiency normalized for vocabulary token length.
     \item \textbf{Why Attention Sinks Form Naturally:} The softmax function enforces a strict sum-to-one constraint: $\sum_{j=0}^{i} A_{ij} = 1.0$. In deep layers, when an attention head has no relevant syntactic dependency for the current query token, it must still allocate 100\% of its probability mass. The network naturally learns to designate the initial token (position 0) as an attention sink---a harmless dumping ground for unneeded attention weights that acts as a computational no-op valve.
 \end{enumerate}
 
@@ -669,7 +656,6 @@ In strict adherence to evaluation guidelines and course policies regarding authe
 \begin{itemize}[noitemsep,leftmargin=*]
     \item \textbf{First-Principles Architectural Implementation:} Every algorithmic component---including SentencePiece tokenization, Rotary Position Embeddings (RoPE), pre-norm RMSNorm, SwiGLU FFNs, causal masking, diagnostic Shannon entropy/attention distance calculations, and synthetic multi-hop reasoning generators---was authored, debugged, and empirically verified by the student.
     \item \textbf{Independent Training from Scratch:} No external pre-trained checkpoints, weights, or third-party Transformer abstractions were utilized at any stage. All models were trained from randomly initialized tensors directly on consumer hardware.
-    \item \textbf{Viva Defense Preparedness:} The student commands a rigorous understanding of all mathematical formulations, loss convergence curves, information-theoretic attention trajectories, and failure modes presented throughout this consolidated report.
 \end{itemize}
 
 \end{document}
